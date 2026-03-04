@@ -1,65 +1,102 @@
-import Image from "next/image";
+'use client';
+
+import styles from './page.module.scss';
+import { useNameStore } from '@/store/useNameStore';
+import { useGenerateNames } from '@/hooks/useGenerateNames';
 
 export default function Home() {
+  const { context, role, namingCase, suggestions, isLoading, setContext, setRole, setNamingCase } = useNameStore();
+  const generateNames = useGenerateNames();
+
+  const handleGenerate = () => {
+    if (!context.trim()) return;
+    generateNames.mutate({ context, role, namingCase });
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className={styles.main}>
+      <div className={styles.hero}>
+        <h1 className={styles.title}>Name Tailor</h1>
+        <p className={styles.subtitle}>
+          AI-powered naming assistant for developers. Never struggle with variable or function names again.
+        </p>
+      </div>
+
+      <div className={styles.glassCard}>
+        <div className={styles.formGroup}>
+          <label htmlFor="context">What does it do?</label>
+          <input 
+            type="text" 
+            id="context" 
+            value={context}
+            onChange={(e) => setContext(e.target.value)}
+            placeholder="e.g., Fetches user profile data from the server" 
+            autoComplete="off"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') handleGenerate();
+            }}
+          />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        <div className={styles.formGroup}>
+          <label htmlFor="role">What is this for?</label>
+          <select 
+            id="role" 
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            <option value="variable">Variable</option>
+            <option value="function">Function</option>
+            <option value="component">Component (React/Vue/etc)</option>
+            <option value="class">Class</option>
+            <option value="hook">React Hook</option>
+            <option value="file">File Name</option>
+            <option value="directory">Directory Name</option>
+          </select>
         </div>
-      </main>
-    </div>
+
+        <div className={styles.formGroup}>
+          <label htmlFor="case">Naming Convention</label>
+          <select 
+            id="case" 
+            value={namingCase}
+            onChange={(e) => setNamingCase(e.target.value)}
+          >
+            <option value="camelCase">camelCase (myVariable)</option>
+            <option value="PascalCase">PascalCase (MyClass)</option>
+            <option value="snake_case">snake_case (my_variable)</option>
+            <option value="kebab-case">kebab-case (my-file-name)</option>
+            <option value="UPPER_SNAKE_CASE">UPPER_SNAKE_CASE (MY_CONSTANT)</option>
+          </select>
+        </div>
+
+        <button 
+          className={styles.submitBtn} 
+          onClick={handleGenerate}
+          disabled={isLoading || !context.trim()}
+          style={{ opacity: (isLoading || !context.trim()) ? 0.7 : 1, cursor: (isLoading || !context.trim()) ? 'not-allowed' : 'pointer' }}
+        >
+          {isLoading ? 'Generating...' : 'Generate Names ✨'}
+        </button>
+
+        {isLoading && (
+          <div className={styles.loading}>
+            Crafting the perfect names...
+          </div>
+        )}
+
+        {!isLoading && suggestions.length > 0 && (
+          <div className={styles.results}>
+            {suggestions.map((item, idx) => (
+              <div key={idx} className={styles.resultItem}>
+                <div className={styles.resultName}>{item.name}</div>
+                <div className={styles.resultExplanation}>{item.explanation}</div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </main>
   );
 }
+
