@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server';
 
 const HF_API_KEY = process.env.HUGGINGFACE_API_KEY;
-const MODEL_URL = "https://router.huggingface.co/hf-inference/models/microsoft/Phi-3-mini-4k-instruct";
+const MODEL_URL = "https://router.huggingface.co/v1/chat/completions";
 
 export async function POST(req: Request) {
   try {
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { error: 'Missing required parameters' },
         { status: 400 }
-      );
+      ); 
     }
 
     const prompt = `[INST] You are an expert developer assistant. Your task is to generate 3 high-quality, descriptive programming names based on the user's requirements. 
@@ -31,21 +31,24 @@ Do not output any markdown formatting around the JSON, just the raw JSON. Exampl
 ]
 [/INST]`;
 
-    const response = await fetch(MODEL_URL, {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${HF_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        inputs: prompt,
-        parameters: {
-          max_new_tokens: 500,
-          temperature: 0.7,
-          return_full_text: false,
-        }
-      }),
-    });
+const response = await fetch(MODEL_URL, {
+  method: "POST",
+  headers: {
+    Authorization: `Bearer ${HF_API_KEY}`,
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify({
+  model: "meta-llama/Meta-Llama-3-8B-Instruct",
+  messages: [
+    {
+      role: "user",
+      content: prompt
+    }
+  ],
+  max_tokens: 300,
+  temperature: 0.7
+})
+});
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -57,8 +60,8 @@ Do not output any markdown formatting around the JSON, just the raw JSON. Exampl
       );
     }
 
-    const result = await response.json();
-    let generatedText = result[0]?.generated_text || "[]";
+  const result = await response.json();
+  let generatedText = result.choices?.[0]?.message?.content || "[]";
     
     // Attempt to parse JSON
     try {
