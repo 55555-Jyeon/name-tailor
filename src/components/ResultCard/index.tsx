@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import styles from './style.module.scss';
 import type { ResultCardProps } from './type';
 import { COPIED_LABEL_MS } from './constant';
-import { getRoleLabel } from '@/constants/option';
+import { useTranslation } from '@/hooks/useTranslation';
+import { useSettings } from '@/providers/SettingsProvider';
 
 const copyWithTextarea = (text: string) => {
   const textarea = document.createElement('textarea');
@@ -21,6 +22,8 @@ const copyWithTextarea = (text: string) => {
 
 const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCardProps) => {
   const [copiedName, setCopiedName] = useState<string | null>(null);
+  const { language } = useSettings();
+  const t = useTranslation();
 
   // Put the "Copied" label back after a moment
   useEffect(() => {
@@ -40,7 +43,7 @@ const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCard
     }
   };
 
-  const time = new Date(result.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const time = new Date(result.createdAt).toLocaleTimeString(language === 'ko' ? 'ko-KR' : 'en-US', { hour: '2-digit', minute: '2-digit' });
 
   return (
     <article className={styles.card}>
@@ -48,14 +51,14 @@ const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCard
         <div className={styles.meta}>
           <p className={styles.context}>{result.context}</p>
           <p className={styles.tags}>
-            {getRoleLabel(result.role)} · {result.namingCase} · {time}
+            {t.roles[result.role] ?? result.role} · {result.namingCase} · {time}
           </p>
         </div>
         <div className={styles.actions}>
-          <button type="button" className={styles.reuseBtn} onClick={onReuse} title="Fill the form with these inputs">
-            ↺ Reuse
+          <button type="button" className={styles.reuseBtn} onClick={onReuse} title={t.card.reuseTitle}>
+            {t.card.reuse}
           </button>
-          <button type="button" className={styles.iconBtn} onClick={onClose} aria-label="Close" title="Close">
+          <button type="button" className={styles.iconBtn} onClick={onClose} aria-label={t.card.close} title={t.card.close}>
             ✕
           </button>
         </div>
@@ -70,16 +73,16 @@ const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCard
                 type="button"
                 className={styles.copyBtn}
                 onClick={() => handleCopy(item.name)}
-                aria-label={`Copy ${item.name}`}
+                aria-label={t.card.copyLabel(item.name)}
               >
-                {copiedName === item.name ? 'Copied ✓' : 'Copy'}
+                {copiedName === item.name ? t.card.copied : t.card.copy}
               </button>
               <button
                 type="button"
                 className={styles.removeBtn}
                 onClick={() => onRemoveSuggestion(item.name)}
-                aria-label={`Remove ${item.name}`}
-                title="Remove this name"
+                aria-label={t.card.removeLabel(item.name)}
+                title={t.card.removeTitle}
               >
                 ✕
               </button>

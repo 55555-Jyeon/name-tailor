@@ -1,6 +1,8 @@
-// Messages shown to the user, keyed by the status code /api/generate returns
-export const ERROR_MESSAGES = {
-  quotaExceeded: "You've used up the free quota for now. Please try again later.",
-  busy: 'The AI service is busy right now. Please try again in a moment.',
-  unknown: 'Something went wrong while generating names. Please try again.',
+import type { ErrorCode } from '@/locales/type';
+
+// Maps the status code /api/generate returns to the message shown to the user
+export const getErrorCode = (status: number): ErrorCode => {
+  if (status === 429) return 'quotaExceeded';
+  if (status === 503 || status === 504) return 'busy';
+  return 'unknown';
 };

@@ -7,10 +7,13 @@ import type { GenerationResult } from '@/types/name';
 import NameForm from '@/components/NameForm';
 import ResultPanel from '@/components/ResultPanel';
 import ThemeToggle from '@/components/ThemeToggle';
+import LanguageToggle from '@/components/LanguageToggle';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const Home = () => {
   const { setContext, setRole, setNamingCase } = useNameStore();
   const contextInputRef = useRef<HTMLInputElement>(null);
+  const t = useTranslation();
 
   // Restore saved result cards from localStorage after the first render
   useEffect(() => {
@@ -29,8 +32,9 @@ const Home = () => {
     <main className={styles.main}>
       <header className={styles.header}>
         <h1 className={styles.title}>Name Tailor</h1>
-        <p className={styles.subtitle}>AI-powered naming assistant for developers</p>
+        <p className={styles.subtitle}>{t.subtitle}</p>
         <div className={styles.controls}>
+          <LanguageToggle />
           <ThemeToggle />
         </div>
       </header>

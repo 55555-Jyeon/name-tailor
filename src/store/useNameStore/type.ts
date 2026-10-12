@@ -1,4 +1,5 @@
 import type { GenerationResult } from '@/types/name';
+import type { ErrorCode } from '@/locales/type';
 
 export interface NameState {
   context: string;
@@ -6,7 +7,7 @@ export interface NameState {
   namingCase: string;
   results: GenerationResult[];
   isLoading: boolean;
-  error: string | null;
+  error: ErrorCode | null;
   setContext: (context: string) => void;
   setRole: (role: string) => void;
   setNamingCase: (namingCase: string) => void;
@@ -15,5 +16,5 @@ export interface NameState {
   removeSuggestion: (resultId: string, name: string) => void;
   clearResults: () => void;
   setIsLoading: (isLoading: boolean) => void;
-  setError: (error: string | null) => void;
+  setError: (error: ErrorCode | null) => void;
 }

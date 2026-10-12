@@ -2,9 +2,11 @@
 
 import styles from './style.module.scss';
 import { useSettings } from '@/providers/SettingsProvider';
+import { useTranslation } from '@/hooks/useTranslation';
 
 const ThemeToggle = () => {
   const { theme, setTheme } = useSettings();
+  const t = useTranslation();
 
   const handleToggle = () => {
     // Without a saved choice the page follows the OS, so start from what is showing now
@@ -15,7 +17,7 @@ const ThemeToggle = () => {
   // Both icons are rendered and CSS shows the one for the active theme,
   // so the server render matches even when the theme comes from the OS
   return (
-    <button type="button" className={styles.toggle} onClick={handleToggle} aria-label="Toggle dark mode" title="Toggle dark mode">
+    <button type="button" className={styles.toggle} onClick={handleToggle} aria-label={t.toggles.theme} title={t.toggles.theme}>
       <span className={styles.sun} aria-hidden="true">☀️</span>
       <span className={styles.moon} aria-hidden="true">🌙</span>
     </button>

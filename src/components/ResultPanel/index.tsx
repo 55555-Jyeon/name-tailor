@@ -5,10 +5,12 @@ import styles from './style.module.scss';
 import type { ResultPanelProps } from './type';
 import { useNameStore } from '@/store/useNameStore';
 import ResultCard from '@/components/ResultCard';
+import { useTranslation } from '@/hooks/useTranslation';
 
 // Only this panel scrolls; the form stays fixed in place
 const ResultPanel = ({ onReuse }: ResultPanelProps) => {
   const { results, isLoading, removeResult, removeSuggestion, clearResults } = useNameStore();
+  const t = useTranslation();
   const bodyRef = useRef<HTMLDivElement>(null);
   const [hasMoreBelow, setHasMoreBelow] = useState(false);
 
@@ -32,7 +34,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
   useEffect(updateHasMoreBelow, [results, isLoading, updateHasMoreBelow]);
 
   const handleClearAll = () => {
-    if (window.confirm('Remove all generated names?')) clearResults();
+    if (window.confirm(t.results.clearConfirm)) clearResults();
   };
 
   return (
@@ -40,10 +42,10 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
       {results.length > 0 && (
         <div className={styles.header}>
           <span className={styles.count}>
-            {results.length} {results.length === 1 ? 'result' : 'results'}
+            {t.results.count(results.length)}
           </span>
           <button type="button" className={styles.clearBtn} onClick={handleClearAll}>
-            Clear all
+            {t.results.clearAll}
           </button>
         </div>
       )}
@@ -54,7 +56,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
       >
         {isLoading && (
           <div className={styles.loading}>
-            Crafting the perfect names...
+            {t.results.loading}
           </div>
         )}
 
@@ -73,7 +75,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
         )}
 
         {!isLoading && results.length === 0 && (
-          <p className={styles.empty}>Generated names will stack up here.</p>
+          <p className={styles.empty}>{t.results.empty}</p>
         )}
       </div>
     </section>

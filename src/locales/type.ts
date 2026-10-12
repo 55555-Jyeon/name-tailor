@@ -1,0 +1,38 @@
+export type Language = 'ko' | 'en';
+
+export type ErrorCode = 'quotaExceeded' | 'busy' | 'unknown';
+
+export interface Dictionary {
+  subtitle: string;
+  form: {
+    contextLabel: string;
+    contextPlaceholder: string;
+    roleLabel: string;
+    caseLabel: string;
+    generate: string;
+    generating: string;
+  };
+  roles: Record<string, string>;
+  results: {
+    count: (count: number) => string;
+    clearAll: string;
+    clearConfirm: string;
+    loading: string;
+    empty: string;
+  };
+  card: {
+    reuse: string;
+    reuseTitle: string;
+    close: string;
+    copy: string;
+    copied: string;
+    copyLabel: (name: string) => string;
+    removeLabel: (name: string) => string;
+    removeTitle: string;
+  };
+  errors: Record<ErrorCode, string>;
+  toggles: {
+    theme: string;
+    language: string;
+  };
+}
