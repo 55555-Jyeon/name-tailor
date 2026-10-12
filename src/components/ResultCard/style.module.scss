@@ -1,6 +1,10 @@
+// Cards sit directly on the page background, so they carry the same glass surface as the form
 .card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(150, 150, 150, 0.2);
+  background: var(--glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(150, 150, 150, 0.15);
+  box-shadow: var(--shadow);
   border-radius: 16px;
   padding: 1.2rem 1.4rem;
   animation: slideIn 0.3s ease forwards;
