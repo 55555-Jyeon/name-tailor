@@ -5,7 +5,7 @@ import { useNameStore } from '@/store/useNameStore';
 import { useGenerateNames } from '@/hooks/useGenerateNames';
 
 export default function Home() {
-  const { context, role, namingCase, suggestions, isLoading, setContext, setRole, setNamingCase } = useNameStore();
+  const { context, role, namingCase, suggestions, isLoading, error, setContext, setRole, setNamingCase } = useNameStore();
   const generateNames = useGenerateNames();
 
   const handleGenerate = () => {
@@ -82,6 +82,12 @@ export default function Home() {
         {isLoading && (
           <div className={styles.loading}>
             Crafting the perfect names...
+          </div>
+        )}
+
+        {!isLoading && error && (
+          <div className={styles.error} role="alert">
+            {error}
           </div>
         )}
 

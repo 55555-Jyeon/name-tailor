@@ -118,6 +118,14 @@ Please provide exactly 3 name suggestions. For each suggestion, provide a brief 
         );
       }
 
+      // Every model stayed overloaded even after retries
+      if (isOverloaded(error)) {
+        return NextResponse.json(
+          { error: 'AI service is overloaded. Please try again later.' },
+          { status: 503 }
+        );
+      }
+
       // Return 502 Bad Gateway to differentiate upstream errors from our own
       return NextResponse.json(
         { error: `Gemini API Error (${error.status}): ${error.message}` },
