@@ -35,7 +35,11 @@ type GenerateParams = Parameters<GoogleGenAI['models']['generateContent']>[0];
 
 const isOverloaded = (error: unknown) => error instanceof ApiError && error.status === 503;
 
-const isTimeout = (error: unknown) => error instanceof Error && error.name === 'AbortError';
+// The SDK also sends the timeout to Gemini (X-Server-Timeout), so the server usually
+// answers 504 DEADLINE_EXCEEDED before the client-side abort fires
+const isTimeout = (error: unknown) =>
+  (error instanceof ApiError && error.status === 504) ||
+  (error instanceof Error && error.name === 'AbortError');
 
 async function generateWithRetry(client: GoogleGenAI, params: GenerateParams) {
   for (let attempt = 0; ; attempt++) {
