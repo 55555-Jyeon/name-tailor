@@ -6,6 +6,7 @@ import { useNameStore } from '@/store/useNameStore';
 import type { GenerationResult } from '@/types/name';
 import NameForm from '@/components/NameForm';
 import ResultPanel from '@/components/ResultPanel';
+import ThemeToggle from '@/components/ThemeToggle';
 
 const Home = () => {
   const { setContext, setRole, setNamingCase } = useNameStore();
@@ -29,6 +30,9 @@ const Home = () => {
       <header className={styles.header}>
         <h1 className={styles.title}>Name Tailor</h1>
         <p className={styles.subtitle}>AI-powered naming assistant for developers</p>
+        <div className={styles.controls}>
+          <ThemeToggle />
+        </div>
       </header>
 
       <div className={styles.workspace}>

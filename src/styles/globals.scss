@@ -1,19 +1,37 @@
-:root {
+@mixin light-theme {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
   --glass: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(255, 255, 255, 0.3);
   --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --spinner-track: rgba(150, 150, 150, 0.25);
+  color-scheme: light;
+}
+
+@mixin dark-theme {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+  --glass: rgba(15, 23, 42, 0.7);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+  --spinner-track: rgba(255, 255, 255, 0.1);
+  color-scheme: dark;
+}
+
+:root {
+  --primary: #3b82f6;
+  --primary-hover: #2563eb;
+  @include light-theme;
+}
+
+// A theme picked with the toggle wins; without one, follow the OS setting
+:root[data-theme='dark'] {
+  @include dark-theme;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f8fafc;
-    --glass: rgba(15, 23, 42, 0.7);
-    --glass-border: rgba(255, 255, 255, 0.1);
+  :root:not([data-theme='light']) {
+    @include dark-theme;
   }
 }
 

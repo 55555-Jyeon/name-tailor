@@ -49,6 +49,13 @@
     color: var(--foreground);
     opacity: 0.7;
   }
+
+  .controls {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
 }
 
 .workspace {
@@ -71,8 +78,14 @@
   }
 
   .header {
-    flex-direction: column;
-    gap: 0.25rem;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.25rem 1rem;
+
+    .subtitle {
+      order: 3;
+      width: 100%;
+    }
   }
 
   .workspace {
