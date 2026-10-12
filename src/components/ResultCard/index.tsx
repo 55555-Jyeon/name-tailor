@@ -19,7 +19,7 @@ const copyWithTextarea = (text: string) => {
   return copied;
 };
 
-const ResultCard = ({ result, onClose, onReuse }: ResultCardProps) => {
+const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCardProps) => {
   const [copiedName, setCopiedName] = useState<string | null>(null);
 
   // Put the "Copied" label back after a moment
@@ -73,6 +73,15 @@ const ResultCard = ({ result, onClose, onReuse }: ResultCardProps) => {
                 aria-label={`Copy ${item.name}`}
               >
                 {copiedName === item.name ? 'Copied ✓' : 'Copy'}
+              </button>
+              <button
+                type="button"
+                className={styles.removeBtn}
+                onClick={() => onRemoveSuggestion(item.name)}
+                aria-label={`Remove ${item.name}`}
+                title="Remove this name"
+              >
+                ✕
               </button>
             </div>
             <p className={styles.explanation}>{item.explanation}</p>

@@ -12,6 +12,7 @@ export interface NameState {
   setNamingCase: (namingCase: string) => void;
   addResult: (result: Omit<GenerationResult, 'id' | 'createdAt'>) => void;
   removeResult: (id: string) => void;
+  removeSuggestion: (resultId: string, name: string) => void;
   clearResults: () => void;
   setIsLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;

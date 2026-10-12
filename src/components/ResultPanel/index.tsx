@@ -8,7 +8,7 @@ import ResultCard from '@/components/ResultCard';
 
 // Only this panel scrolls; the form stays fixed in place
 const ResultPanel = ({ onReuse }: ResultPanelProps) => {
-  const { results, isLoading, removeResult, clearResults } = useNameStore();
+  const { results, isLoading, removeResult, removeSuggestion, clearResults } = useNameStore();
   const bodyRef = useRef<HTMLDivElement>(null);
   const [hasMoreBelow, setHasMoreBelow] = useState(false);
 
@@ -65,6 +65,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
                 key={result.id}
                 result={result}
                 onClose={() => removeResult(result.id)}
+                onRemoveSuggestion={(name) => removeSuggestion(result.id, name)}
                 onReuse={() => onReuse(result)}
               />
             ))}

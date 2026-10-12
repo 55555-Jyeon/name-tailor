@@ -21,6 +21,17 @@ const useNameStore = create<NameState>()(
         })),
       removeResult: (id) =>
         set((state) => ({ results: state.results.filter((result) => result.id !== id) })),
+      // Drops one name from a card; the card goes away once its last name is removed
+      removeSuggestion: (resultId, name) =>
+        set((state) => ({
+          results: state.results
+            .map((result) =>
+              result.id === resultId
+                ? { ...result, suggestions: result.suggestions.filter((item) => item.name !== name) }
+                : result
+            )
+            .filter((result) => result.suggestions.length > 0),
+        })),
       clearResults: () => set({ results: [] }),
       setIsLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),
