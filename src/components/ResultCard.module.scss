@@ -130,3 +130,14 @@
   opacity: 0.8;
   line-height: 1.5;
 }
+
+// Narrow screens: give long names more room so they don't break mid-word as often
+@media (max-width: 899px) {
+  .card {
+    padding: 1rem;
+  }
+
+  .name {
+    font-size: 0.95rem;
+  }
+}
