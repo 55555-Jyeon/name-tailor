@@ -1,17 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import styles from './ResultCard.module.scss';
+import styles from './style.module.scss';
+import type { ResultCardProps } from './type';
+import { COPIED_LABEL_MS } from './constant';
 import { getRoleLabel } from '@/constants/options';
-import type { GenerationResult } from '@/store/useNameStore';
 
-interface ResultCardProps {
-  result: GenerationResult;
-  onClose: () => void;
-  onReuse: () => void;
-}
-
-function copyWithTextarea(text: string) {
+const copyWithTextarea = (text: string) => {
   const textarea = document.createElement('textarea');
   textarea.value = text;
   textarea.setAttribute('readonly', '');
@@ -22,15 +17,15 @@ function copyWithTextarea(text: string) {
   const copied = document.execCommand('copy');
   document.body.removeChild(textarea);
   return copied;
-}
+};
 
-export default function ResultCard({ result, onClose, onReuse }: ResultCardProps) {
+const ResultCard = ({ result, onClose, onReuse }: ResultCardProps) => {
   const [copiedName, setCopiedName] = useState<string | null>(null);
 
   // Put the "Copied" label back after a moment
   useEffect(() => {
     if (!copiedName) return;
-    const timer = setTimeout(() => setCopiedName(null), 1500);
+    const timer = setTimeout(() => setCopiedName(null), COPIED_LABEL_MS);
     return () => clearTimeout(timer);
   }, [copiedName]);
 
@@ -86,4 +81,6 @@ export default function ResultCard({ result, onClose, onReuse }: ResultCardProps
       </ul>
     </article>
   );
-}
+};
+
+export default ResultCard;
