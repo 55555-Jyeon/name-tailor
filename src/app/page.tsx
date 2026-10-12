@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import styles from './page.module.scss';
-import { useNameStore } from '@/store/useNameStore';
+import { useNameStore, type GenerationResult } from '@/store/useNameStore';
 import { useGenerateNames } from '@/hooks/useGenerateNames';
 import { CASE_OPTIONS, ROLE_OPTIONS } from '@/constants/options';
 import ResultCard from '@/components/ResultCard';
@@ -13,11 +13,20 @@ export default function Home() {
     setContext, setRole, setNamingCase, removeResult, clearResults,
   } = useNameStore();
   const generateNames = useGenerateNames();
+  const contextInputRef = useRef<HTMLInputElement>(null);
 
   // Restore saved result cards from localStorage after the first render
   useEffect(() => {
     useNameStore.persist.rehydrate();
   }, []);
+
+  // Put a card's inputs back into the form so they can be tweaked and regenerated
+  const handleReuse = (result: GenerationResult) => {
+    setContext(result.context);
+    setRole(result.role);
+    setNamingCase(result.namingCase);
+    contextInputRef.current?.focus();
+  };
 
   const handleClearAll = () => {
     if (window.confirm('Remove all generated names?')) clearResults();
@@ -42,6 +51,7 @@ export default function Home() {
             <input 
               type="text" 
               id="context" 
+              ref={contextInputRef}
               value={context}
               onChange={(e) => setContext(e.target.value)}
               placeholder="e.g., Fetches user profile data from the server" 
@@ -116,7 +126,12 @@ export default function Home() {
             {results.length > 0 && (
               <div className={styles.results}>
                 {results.map((result) => (
-                  <ResultCard key={result.id} result={result} onClose={() => removeResult(result.id)} />
+                  <ResultCard
+                    key={result.id}
+                    result={result}
+                    onClose={() => removeResult(result.id)}
+                    onReuse={() => handleReuse(result)}
+                  />
                 ))}
               </div>
             )}

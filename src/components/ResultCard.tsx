@@ -8,6 +8,7 @@ import type { GenerationResult } from '@/store/useNameStore';
 interface ResultCardProps {
   result: GenerationResult;
   onClose: () => void;
+  onReuse: () => void;
 }
 
 function copyWithTextarea(text: string) {
@@ -23,7 +24,7 @@ function copyWithTextarea(text: string) {
   return copied;
 }
 
-export default function ResultCard({ result, onClose }: ResultCardProps) {
+export default function ResultCard({ result, onClose, onReuse }: ResultCardProps) {
   const [copiedName, setCopiedName] = useState<string | null>(null);
 
   // Put the "Copied" label back after a moment
@@ -55,9 +56,14 @@ export default function ResultCard({ result, onClose }: ResultCardProps) {
             {getRoleLabel(result.role)} · {result.namingCase} · {time}
           </p>
         </div>
-        <button type="button" className={styles.iconBtn} onClick={onClose} aria-label="Close" title="Close">
-          ✕
-        </button>
+        <div className={styles.actions}>
+          <button type="button" className={styles.reuseBtn} onClick={onReuse} title="Fill the form with these inputs">
+            ↺ Reuse
+          </button>
+          <button type="button" className={styles.iconBtn} onClick={onClose} aria-label="Close" title="Close">
+            ✕
+          </button>
+        </div>
       </header>
 
       <ul className={styles.suggestions}>
