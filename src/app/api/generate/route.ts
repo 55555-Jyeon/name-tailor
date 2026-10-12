@@ -3,7 +3,8 @@ import { NextResponse } from 'next/server';
 import { ApiError, GoogleGenAI } from '@google/genai';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const MODEL = "gemini-3.8-flash";
+// Tried in order: when the first model stays overloaded, fall back to the lighter one
+const MODELS = ["gemini-3.8-flash", "gemini-3.5-flash-lite"];
 
 const ai = GEMINI_API_KEY ? new GoogleGenAI({ apiKey: GEMINI_API_KEY }) : null;
 
@@ -27,17 +28,33 @@ const RETRY_DELAYS_MS = [2000, 4000];
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-async function generateWithRetry(client: GoogleGenAI, params: Parameters<GoogleGenAI['models']['generateContent']>[0]) {
+type GenerateParams = Parameters<GoogleGenAI['models']['generateContent']>[0];
+
+const isOverloaded = (error: unknown) => error instanceof ApiError && error.status === 503;
+
+async function generateWithRetry(client: GoogleGenAI, params: GenerateParams) {
   for (let attempt = 0; ; attempt++) {
     try {
       return await client.models.generateContent(params);
     } catch (error) {
-      const isOverloaded = error instanceof ApiError && error.status === 503;
-      if (!isOverloaded || attempt >= RETRY_DELAYS_MS.length) throw error;
-      console.warn(`Gemini overloaded, retrying in ${RETRY_DELAYS_MS[attempt]}ms`);
+      if (!isOverloaded(error) || attempt >= RETRY_DELAYS_MS.length) throw error;
+      console.warn(`${params.model} overloaded, retrying in ${RETRY_DELAYS_MS[attempt]}ms`);
       await sleep(RETRY_DELAYS_MS[attempt]);
     }
   }
+}
+
+async function generateWithFallback(client: GoogleGenAI, params: Omit<GenerateParams, 'model'>) {
+  for (const [index, model] of MODELS.entries()) {
+    try {
+      return await generateWithRetry(client, { ...params, model });
+    } catch (error) {
+      const nextModel = MODELS[index + 1];
+      if (!isOverloaded(error) || !nextModel) throw error;
+      console.warn(`${model} still overloaded, falling back to ${nextModel}`);
+    }
+  }
+  throw new Error('No Gemini model configured');
 }
 
 export async function POST(req: Request) {
@@ -67,8 +84,7 @@ Requirements:
 
 Please provide exactly 3 name suggestions. For each suggestion, provide a brief explanation (1 sentence) of why it's a good name.`;
 
-    const response = await generateWithRetry(ai, {
-      model: MODEL,
+    const response = await generateWithFallback(ai, {
       contents: prompt,
       config: {
         responseMimeType: "application/json",
