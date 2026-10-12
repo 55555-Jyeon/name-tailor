@@ -10,7 +10,7 @@ import ResultCard from '@/components/ResultCard';
 export default function Home() {
   const {
     context, role, namingCase, results, isLoading, error,
-    setContext, setRole, setNamingCase, removeResult,
+    setContext, setRole, setNamingCase, removeResult, clearResults,
   } = useNameStore();
   const generateNames = useGenerateNames();
 
@@ -18,6 +18,10 @@ export default function Home() {
   useEffect(() => {
     useNameStore.persist.rehydrate();
   }, []);
+
+  const handleClearAll = () => {
+    if (window.confirm('Remove all generated names?')) clearResults();
+  };
 
   const handleGenerate = () => {
     if (!context.trim()) return;
@@ -92,6 +96,16 @@ export default function Home() {
 
         {/* Only this panel scrolls; the form stays fixed in place */}
         <section className={`${styles.glassCard} ${styles.resultsPanel}`} aria-label="Generated names">
+          {results.length > 0 && (
+            <div className={styles.resultsHeader}>
+              <span className={styles.resultsCount}>
+                {results.length} {results.length === 1 ? 'result' : 'results'}
+              </span>
+              <button type="button" className={styles.clearBtn} onClick={handleClearAll}>
+                Clear all
+              </button>
+            </div>
+          )}
           <div className={styles.resultsBody}>
             {isLoading && (
               <div className={styles.loading}>

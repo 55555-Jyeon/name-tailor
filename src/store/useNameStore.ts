@@ -28,6 +28,7 @@ interface NameState {
   setNamingCase: (namingCase: string) => void;
   addResult: (result: Omit<GenerationResult, 'id' | 'createdAt'>) => void;
   removeResult: (id: string) => void;
+  clearResults: () => void;
   setIsLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
 }
@@ -51,6 +52,7 @@ export const useNameStore = create<NameState>()(
         })),
       removeResult: (id) =>
         set((state) => ({ results: state.results.filter((result) => result.id !== id) })),
+      clearResults: () => set({ results: [] }),
       setIsLoading: (isLoading) => set({ isLoading }),
       setError: (error) => set({ error }),
     }),
