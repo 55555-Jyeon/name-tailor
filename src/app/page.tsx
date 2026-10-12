@@ -1,12 +1,23 @@
 'use client';
 
+import { useEffect } from 'react';
 import styles from './page.module.scss';
 import { useNameStore } from '@/store/useNameStore';
 import { useGenerateNames } from '@/hooks/useGenerateNames';
+import { CASE_OPTIONS, ROLE_OPTIONS } from '@/constants/options';
+import ResultCard from '@/components/ResultCard';
 
 export default function Home() {
-  const { context, role, namingCase, suggestions, isLoading, error, setContext, setRole, setNamingCase } = useNameStore();
+  const {
+    context, role, namingCase, results, isLoading, error,
+    setContext, setRole, setNamingCase, removeResult,
+  } = useNameStore();
   const generateNames = useGenerateNames();
+
+  // Restore saved result cards from localStorage after the first render
+  useEffect(() => {
+    useNameStore.persist.rehydrate();
+  }, []);
 
   const handleGenerate = () => {
     if (!context.trim()) return;
@@ -44,13 +55,9 @@ export default function Home() {
               value={role}
               onChange={(e) => setRole(e.target.value)}
             >
-              <option value="variable">Variable</option>
-              <option value="function">Function</option>
-              <option value="component">Component (React/Vue/etc)</option>
-              <option value="class">Class</option>
-              <option value="hook">React Hook</option>
-              <option value="file">File Name</option>
-              <option value="directory">Directory Name</option>
+              {ROLE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
             </select>
           </div>
 
@@ -61,11 +68,9 @@ export default function Home() {
               value={namingCase}
               onChange={(e) => setNamingCase(e.target.value)}
             >
-              <option value="camelCase">camelCase (myVariable)</option>
-              <option value="PascalCase">PascalCase (MyClass)</option>
-              <option value="snake_case">snake_case (my_variable)</option>
-              <option value="kebab-case">kebab-case (my-file-name)</option>
-              <option value="UPPER_SNAKE_CASE">UPPER_SNAKE_CASE (MY_CONSTANT)</option>
+              {CASE_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>{option.label}</option>
+              ))}
             </select>
           </div>
 
@@ -94,19 +99,16 @@ export default function Home() {
               </div>
             )}
 
-            {!isLoading && suggestions.length > 0 && (
+            {results.length > 0 && (
               <div className={styles.results}>
-                {suggestions.map((item, idx) => (
-                  <div key={idx} className={styles.resultItem}>
-                    <div className={styles.resultName}>{item.name}</div>
-                    <div className={styles.resultExplanation}>{item.explanation}</div>
-                  </div>
+                {results.map((result) => (
+                  <ResultCard key={result.id} result={result} onClose={() => removeResult(result.id)} />
                 ))}
               </div>
             )}
 
-            {!isLoading && suggestions.length === 0 && (
-              <p className={styles.empty}>Generated names will show up here.</p>
+            {!isLoading && results.length === 0 && (
+              <p className={styles.empty}>Generated names will stack up here.</p>
             )}
           </div>
         </section>

@@ -9,7 +9,7 @@ const getErrorMessage = (status: number) => {
 };
 
 export const useGenerateNames = () => {
-  const { setSuggestions, setIsLoading, setError } = useNameStore();
+  const { addResult, setIsLoading, setError } = useNameStore();
 
   return useMutation({
     mutationFn: async ({ context, role, namingCase }: { context: string, role: string, namingCase: string }) => {
@@ -29,11 +29,10 @@ export const useGenerateNames = () => {
     },
     onMutate: () => {
       setIsLoading(true);
-      setSuggestions([]);
       setError(null);
     },
-    onSuccess: (data) => {
-      setSuggestions(data.suggestions || []);
+    onSuccess: (data, variables) => {
+      addResult({ ...variables, suggestions: data.suggestions || [] });
     },
     onError: (error) => {
       console.error('Error generating names:', error);
