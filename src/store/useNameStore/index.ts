@@ -1,39 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import type { NameState } from './type';
 
-export interface NameSuggestion {
-  name: string;
-  explanation: string;
-}
-
-// One card in the results panel: a single generation and the inputs that produced it
-export interface GenerationResult {
-  id: string;
-  context: string;
-  role: string;
-  namingCase: string;
-  suggestions: NameSuggestion[];
-  createdAt: number;
-}
-
-interface NameState {
-  context: string;
-  role: string;
-  namingCase: string;
-  results: GenerationResult[];
-  isLoading: boolean;
-  error: string | null;
-  setContext: (context: string) => void;
-  setRole: (role: string) => void;
-  setNamingCase: (namingCase: string) => void;
-  addResult: (result: Omit<GenerationResult, 'id' | 'createdAt'>) => void;
-  removeResult: (id: string) => void;
-  clearResults: () => void;
-  setIsLoading: (isLoading: boolean) => void;
-  setError: (error: string | null) => void;
-}
-
-export const useNameStore = create<NameState>()(
+const useNameStore = create<NameState>()(
   persist(
     (set) => ({
       context: '',
@@ -65,3 +34,5 @@ export const useNameStore = create<NameState>()(
     }
   )
 );
+
+export { useNameStore };

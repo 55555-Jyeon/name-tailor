@@ -1,7 +1,7 @@
 import { ApiError, GoogleGenAI } from '@google/genai';
 import { MODELS, REQUEST_TIMEOUT_MS, RETRY_DELAYS_MS, SUGGESTIONS_SCHEMA } from './constant';
-import type { GenerateParams, NameRequest } from './type';
-import type { NameSuggestion } from '@/store/useNameStore';
+import type { GenerateParams } from './type';
+import type { NameRequest, NameSuggestion } from '@/types/name';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 

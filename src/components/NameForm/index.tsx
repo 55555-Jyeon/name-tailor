@@ -4,7 +4,7 @@ import styles from './style.module.scss';
 import type { NameFormProps } from './type';
 import { useNameStore } from '@/store/useNameStore';
 import { useGenerateNames } from '@/hooks/useGenerateNames';
-import { CASE_OPTIONS, ROLE_OPTIONS } from '@/constants/options';
+import { CASE_OPTIONS, ROLE_OPTIONS } from '@/constants/option';
 
 const NameForm = ({ inputRef }: NameFormProps) => {
   const { context, role, namingCase, isLoading, error, setContext, setRole, setNamingCase } = useNameStore();

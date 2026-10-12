@@ -2,7 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import styles from './style.module.scss';
-import { useNameStore, type GenerationResult } from '@/store/useNameStore';
+import { useNameStore } from '@/store/useNameStore';
+import type { GenerationResult } from '@/types/name';
 import NameForm from '@/components/NameForm';
 import ResultPanel from '@/components/ResultPanel';
 

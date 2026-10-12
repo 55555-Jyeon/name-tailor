@@ -1,18 +1,19 @@
 import { useMutation } from '@tanstack/react-query';
+import { ERROR_MESSAGES } from './constant';
 import { useNameStore } from '@/store/useNameStore';
+import type { NameRequest } from '@/types/name';
 
-// Messages shown to the user, keyed by the status code /api/generate returns
 const getErrorMessage = (status: number) => {
-  if (status === 429) return "You've used up the free quota for now. Please try again later.";
-  if (status === 503 || status === 504) return 'The AI service is busy right now. Please try again in a moment.';
-  return 'Something went wrong while generating names. Please try again.';
+  if (status === 429) return ERROR_MESSAGES.quotaExceeded;
+  if (status === 503 || status === 504) return ERROR_MESSAGES.busy;
+  return ERROR_MESSAGES.unknown;
 };
 
-export const useGenerateNames = () => {
+const useGenerateNames = () => {
   const { addResult, setIsLoading, setError } = useNameStore();
 
   return useMutation({
-    mutationFn: async ({ context, role, namingCase }: { context: string, role: string, namingCase: string }) => {
+    mutationFn: async ({ context, role, namingCase }: NameRequest) => {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
@@ -43,3 +44,5 @@ export const useGenerateNames = () => {
     }
   });
 };
+
+export { useGenerateNames };

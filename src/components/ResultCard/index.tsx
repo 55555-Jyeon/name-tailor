@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './style.module.scss';
 import type { ResultCardProps } from './type';
 import { COPIED_LABEL_MS } from './constant';
-import { getRoleLabel } from '@/constants/options';
+import { getRoleLabel } from '@/constants/option';
 
 const copyWithTextarea = (text: string) => {
   const textarea = document.createElement('textarea');

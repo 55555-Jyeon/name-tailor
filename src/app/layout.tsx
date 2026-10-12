@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.scss";
+import "@/styles/globals.scss";
 import Providers from "@/providers/QueryProvider";
 
 const geistSans = Geist({
@@ -13,16 +13,16 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: "Name Tailor - AI Naming Helper",
   description: "AI-powered naming helper for developers",
 };
 
-export default function RootLayout({
+const RootLayout = ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
   return (
     <html lang="en">
       <body
@@ -35,4 +35,7 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export { metadata };
+export default RootLayout;
