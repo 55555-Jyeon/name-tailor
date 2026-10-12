@@ -6,8 +6,7 @@ import { useNameStore } from '@/store/useNameStore';
 import type { GenerationResult } from '@/types/name';
 import NameForm from '@/components/NameForm';
 import ResultPanel from '@/components/ResultPanel';
-import ThemeToggle from '@/components/ThemeToggle';
-import LanguageToggle from '@/components/LanguageToggle';
+import SettingsMenu from '@/components/SettingsMenu';
 import { useTranslation } from '@/hooks/useTranslation';
 
 const Home = () => {
@@ -34,8 +33,7 @@ const Home = () => {
         <h1 className={styles.title}>Name Tailor</h1>
         <p className={styles.subtitle}>{t.subtitle}</p>
         <div className={styles.controls}>
-          <LanguageToggle />
-          <ThemeToggle />
+          <SettingsMenu />
         </div>
       </header>
 

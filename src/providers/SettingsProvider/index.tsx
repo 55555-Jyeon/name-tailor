@@ -2,34 +2,52 @@
 
 import { createContext, useContext, useState } from 'react';
 import { COOKIE_MAX_AGE, LANGUAGE_COOKIE, THEME_COOKIE } from './constant';
-import type { SettingsContextValue, SettingsProviderProps, Theme } from './type';
+import type { LanguagePreference, SettingsContextValue, SettingsProviderProps, ThemePreference } from './type';
 import type { Language } from '@/locales/type';
+import { detectLanguage } from '@/locales';
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
 
-// Settings live in cookies so the server can render the right theme and language on the first paint
+// Settings live in cookies so the server can render the right theme and language on the first paint.
+// 'system' is stored by removing the cookie, which makes the server fall back to the OS/browser.
 const saveCookie = (name: string, value: string) => {
+  if (value === 'system') {
+    document.cookie = `${name}=; path=/; max-age=0; samesite=lax`;
+    return;
+  }
   document.cookie = `${name}=${value}; path=/; max-age=${COOKIE_MAX_AGE}; samesite=lax`;
 };
 
-const SettingsProvider = ({ initialTheme, initialLanguage, children }: SettingsProviderProps) => {
-  const [theme, setThemeState] = useState<Theme | null>(initialTheme);
-  const [language, setLanguageState] = useState<Language>(initialLanguage);
+const SettingsProvider = ({
+  initialThemePreference,
+  initialLanguagePreference,
+  initialLanguage,
+  children,
+}: SettingsProviderProps) => {
+  const [themePreference, setThemeState] = useState<ThemePreference>(initialThemePreference);
+  const [languagePreference, setLanguagePreferenceState] = useState<LanguagePreference>(initialLanguagePreference);
+  const [language, setLanguage] = useState<Language>(initialLanguage);
 
-  const setTheme = (next: Theme) => {
+  const setThemePreference = (next: ThemePreference) => {
     setThemeState(next);
-    document.documentElement.dataset.theme = next;
+    // Without data-theme the CSS falls back to prefers-color-scheme
+    if (next === 'system') delete document.documentElement.dataset.theme;
+    else document.documentElement.dataset.theme = next;
     saveCookie(THEME_COOKIE, next);
   };
 
-  const setLanguage = (next: Language) => {
-    setLanguageState(next);
-    document.documentElement.lang = next;
+  const setLanguagePreference = (next: LanguagePreference) => {
+    const resolved = next === 'system' ? detectLanguage(navigator.languages.join(',')) : next;
+    setLanguagePreferenceState(next);
+    setLanguage(resolved);
+    document.documentElement.lang = resolved;
     saveCookie(LANGUAGE_COOKIE, next);
   };
 
   return (
-    <SettingsContext.Provider value={{ theme, setTheme, language, setLanguage }}>
+    <SettingsContext.Provider
+      value={{ themePreference, setThemePreference, languagePreference, language, setLanguagePreference }}
+    >
       {children}
     </SettingsContext.Provider>
   );

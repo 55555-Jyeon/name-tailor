@@ -41,9 +41,14 @@ const en: Dictionary = {
     busy: 'The AI service is busy right now. Please try again in a moment.',
     unknown: 'Something went wrong while generating names. Please try again.',
   },
-  toggles: {
-    theme: 'Toggle dark mode',
+  settings: {
+    open: 'Settings',
+    theme: 'Theme',
+    light: 'Light',
+    dark: 'Dark',
+    system: 'System',
     language: 'Language',
+    browserLanguage: 'Browser',
   },
 };
 

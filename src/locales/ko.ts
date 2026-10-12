@@ -41,9 +41,14 @@ const ko: Dictionary = {
     busy: 'AI 서비스가 붐비고 있어요. 잠시 후 다시 시도해 주세요.',
     unknown: '이름을 만드는 중에 문제가 생겼어요. 다시 시도해 주세요.',
   },
-  toggles: {
-    theme: '다크 모드 전환',
+  settings: {
+    open: '설정',
+    theme: '테마',
+    light: '라이트',
+    dark: '다크',
+    system: '시스템',
     language: '언어',
+    browserLanguage: '브라우저',
   },
 };
 

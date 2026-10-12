@@ -5,7 +5,7 @@ import "@/styles/globals.scss";
 import Providers from "@/providers/QueryProvider";
 import SettingsProvider from "@/providers/SettingsProvider";
 import { LANGUAGE_COOKIE, THEME_COOKIE } from "@/providers/SettingsProvider/constant";
-import type { Theme } from "@/providers/SettingsProvider/type";
+import type { LanguagePreference, ThemePreference } from "@/providers/SettingsProvider/type";
 import { detectLanguage, isLanguage } from "@/locales";
 
 const geistSans = Geist({
@@ -31,21 +31,26 @@ const RootLayout = async ({
   // Read saved settings on the server so the first paint already uses them
   const cookieStore = await cookies();
   const savedTheme = cookieStore.get(THEME_COOKIE)?.value;
-  const theme: Theme | null = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : null;
+  const themePreference: ThemePreference = savedTheme === 'light' || savedTheme === 'dark' ? savedTheme : 'system';
 
-  // No saved language yet: fall back to the browser's preferred language
+  // No saved language (or 'system'): use the browser's preferred language
   const savedLanguage = cookieStore.get(LANGUAGE_COOKIE)?.value;
+  const languagePreference: LanguagePreference = isLanguage(savedLanguage) ? savedLanguage : 'system';
   const language = isLanguage(savedLanguage)
     ? savedLanguage
     : detectLanguage((await headers()).get('accept-language'));
 
   return (
-    <html lang={language} data-theme={theme ?? undefined}>
+    <html lang={language} data-theme={themePreference === 'system' ? undefined : themePreference}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         suppressHydrationWarning
       >
-        <SettingsProvider initialTheme={theme} initialLanguage={language}>
+        <SettingsProvider
+          initialThemePreference={themePreference}
+          initialLanguagePreference={languagePreference}
+          initialLanguage={language}
+        >
           <Providers>
             {children}
           </Providers>

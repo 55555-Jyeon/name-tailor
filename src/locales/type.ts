@@ -31,8 +31,13 @@ export interface Dictionary {
     removeTitle: string;
   };
   errors: Record<ErrorCode, string>;
-  toggles: {
+  settings: {
+    open: string;
     theme: string;
+    light: string;
+    dark: string;
+    system: string;
     language: string;
+    browserLanguage: string;
   };
 }

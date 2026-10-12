@@ -3,16 +3,23 @@ import type { Language } from '@/locales/type';
 
 export type Theme = 'light' | 'dark';
 
+// 'system' follows the OS theme / browser language instead of a fixed choice
+export type ThemePreference = Theme | 'system';
+
+export type LanguagePreference = Language | 'system';
+
 export interface SettingsContextValue {
-  // null means no choice was made yet, so the OS setting is followed
-  theme: Theme | null;
-  setTheme: (theme: Theme) => void;
+  themePreference: ThemePreference;
+  setThemePreference: (preference: ThemePreference) => void;
+  languagePreference: LanguagePreference;
+  // The language actually shown (resolved from the browser when the preference is 'system')
   language: Language;
-  setLanguage: (language: Language) => void;
+  setLanguagePreference: (preference: LanguagePreference) => void;
 }
 
 export interface SettingsProviderProps {
-  initialTheme: Theme | null;
+  initialThemePreference: ThemePreference;
+  initialLanguagePreference: LanguagePreference;
   initialLanguage: Language;
   children: ReactNode;
 }

@@ -32,7 +32,9 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  z-index: 1;
+  position: relative;
+  // Above the workspace so the settings popover is not covered by the cards
+  z-index: 2;
 
   .title {
     font-size: 1.75rem;

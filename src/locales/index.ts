@@ -4,9 +4,10 @@ import type { Dictionary, Language } from './type';
 
 const DICTIONARIES: Record<Language, Dictionary> = { ko, en };
 
+// Shown in each language's own name so it is recognizable whatever the UI language is
 const LANGUAGES: { value: Language; label: string }[] = [
-  { value: 'ko', label: 'KO' },
-  { value: 'en', label: 'EN' },
+  { value: 'ko', label: '한국어' },
+  { value: 'en', label: 'English' },
 ];
 
 const isLanguage = (value: string | undefined): value is Language => value === 'ko' || value === 'en';
