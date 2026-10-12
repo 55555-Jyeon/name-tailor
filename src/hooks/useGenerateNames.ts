@@ -4,7 +4,7 @@ import { useNameStore } from '@/store/useNameStore';
 // Messages shown to the user, keyed by the status code /api/generate returns
 const getErrorMessage = (status: number) => {
   if (status === 429) return "You've used up the free quota for now. Please try again later.";
-  if (status === 503) return 'The AI service is busy right now. Please try again in a moment.';
+  if (status === 503 || status === 504) return 'The AI service is busy right now. Please try again in a moment.';
   return 'Something went wrong while generating names. Please try again.';
 };
 

@@ -26,16 +26,24 @@ const suggestionsSchema = {
 // Gemini returns 503 when the model is temporarily overloaded; these usually clear within seconds
 const RETRY_DELAYS_MS = [2000, 4000];
 
+// An overloaded model can hang for minutes before failing, so cap each request
+const REQUEST_TIMEOUT_MS = 15000;
+
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 type GenerateParams = Parameters<GoogleGenAI['models']['generateContent']>[0];
 
 const isOverloaded = (error: unknown) => error instanceof ApiError && error.status === 503;
 
+const isTimeout = (error: unknown) => error instanceof Error && error.name === 'AbortError';
+
 async function generateWithRetry(client: GoogleGenAI, params: GenerateParams) {
   for (let attempt = 0; ; attempt++) {
     try {
-      return await client.models.generateContent(params);
+      return await client.models.generateContent({
+        ...params,
+        config: { ...params.config, httpOptions: { timeout: REQUEST_TIMEOUT_MS } },
+      });
     } catch (error) {
       if (!isOverloaded(error) || attempt >= RETRY_DELAYS_MS.length) throw error;
       console.warn(`${params.model} overloaded, retrying in ${RETRY_DELAYS_MS[attempt]}ms`);
@@ -50,8 +58,9 @@ async function generateWithFallback(client: GoogleGenAI, params: Omit<GeneratePa
       return await generateWithRetry(client, { ...params, model });
     } catch (error) {
       const nextModel = MODELS[index + 1];
-      if (!isOverloaded(error) || !nextModel) throw error;
-      console.warn(`${model} still overloaded, falling back to ${nextModel}`);
+      // A timed-out model is not retried; it goes straight to the next model
+      if (!(isOverloaded(error) || isTimeout(error)) || !nextModel) throw error;
+      console.warn(`${model} ${isTimeout(error) ? 'timed out' : 'still overloaded'}, falling back to ${nextModel}`);
     }
   }
   throw new Error('No Gemini model configured');
@@ -107,6 +116,14 @@ Please provide exactly 3 name suggestions. For each suggestion, provide a brief 
     }
 
   } catch (error) {
+    if (isTimeout(error)) {
+      console.error('Gemini request timed out on every model');
+      return NextResponse.json(
+        { error: 'AI service took too long to respond. Please try again later.' },
+        { status: 504 }
+      );
+    }
+
     if (error instanceof ApiError) {
       console.error('Gemini API Error:', error.message);
 
