@@ -22,6 +22,24 @@ const suggestionsSchema = {
   maxItems: 3,
 };
 
+// Gemini returns 503 when the model is temporarily overloaded; these usually clear within seconds
+const RETRY_DELAYS_MS = [2000, 4000];
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+async function generateWithRetry(client: GoogleGenAI, params: Parameters<GoogleGenAI['models']['generateContent']>[0]) {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      return await client.models.generateContent(params);
+    } catch (error) {
+      const isOverloaded = error instanceof ApiError && error.status === 503;
+      if (!isOverloaded || attempt >= RETRY_DELAYS_MS.length) throw error;
+      console.warn(`Gemini overloaded, retrying in ${RETRY_DELAYS_MS[attempt]}ms`);
+      await sleep(RETRY_DELAYS_MS[attempt]);
+    }
+  }
+}
+
 export async function POST(req: Request) {
   try {
     if (!ai) {
@@ -49,7 +67,7 @@ Requirements:
 
 Please provide exactly 3 name suggestions. For each suggestion, provide a brief explanation (1 sentence) of why it's a good name.`;
 
-    const response = await ai.models.generateContent({
+    const response = await generateWithRetry(ai, {
       model: MODEL,
       contents: prompt,
       config: {
