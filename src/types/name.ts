@@ -7,7 +7,9 @@ export interface NameRequest {
 
 export interface NameSuggestion {
   name: string;
+  // English explanation (cards saved before translation support only have this one)
   explanation: string;
+  explanationKo?: string;
 }
 
 // One card in the results panel: a single generation and the inputs that produced it

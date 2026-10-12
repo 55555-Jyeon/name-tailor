@@ -8,16 +8,18 @@ export const RETRY_DELAYS_MS = [2000, 4000];
 // An overloaded model can hang for minutes before failing, so cap each request
 export const REQUEST_TIMEOUT_MS = 15000;
 
-// Forces Gemini to answer with exactly this shape, so no markdown cleanup is needed
+// Forces Gemini to answer with exactly this shape, so no markdown cleanup is needed.
+// Explanations come in both languages so the language toggle needs no extra request.
 export const SUGGESTIONS_SCHEMA = {
   type: "array",
   items: {
     type: "object",
     properties: {
       name: { type: "string" },
-      explanation: { type: "string" },
+      explanationEn: { type: "string" },
+      explanationKo: { type: "string" },
     },
-    required: ["name", "explanation"],
+    required: ["name", "explanationEn", "explanationKo"],
   },
   minItems: 3,
   maxItems: 3,

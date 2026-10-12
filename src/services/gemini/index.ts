@@ -1,6 +1,6 @@
 import { ApiError, GoogleGenAI } from '@google/genai';
 import { MODELS, REQUEST_TIMEOUT_MS, RETRY_DELAYS_MS, SUGGESTIONS_SCHEMA } from './constant';
-import type { GenerateParams } from './type';
+import type { GeminiSuggestion, GenerateParams } from './type';
 import type { NameRequest, NameSuggestion } from '@/types/name';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
@@ -68,7 +68,8 @@ Requirements:
 - Context/Description: ${context}
 - Naming Convention: ${namingCase}
 
-Please provide exactly 3 name suggestions. For each suggestion, provide a brief explanation (1 sentence) of why it's a good name.`;
+Please provide exactly 3 name suggestions. For each suggestion, explain in one sentence why it's a good name,
+once in English (explanationEn) and once in natural Korean (explanationKo). Keep the names themselves in English.`;
 
 const generateNameSuggestions = async (request: NameRequest): Promise<NameSuggestion[]> => {
   if (!ai) throw new Error('GEMINI_API_KEY is not set');
@@ -84,11 +85,18 @@ const generateNameSuggestions = async (request: NameRequest): Promise<NameSugges
 
   const generatedText = response.text ?? "[]";
 
+  let parsed: GeminiSuggestion[];
   try {
-    return JSON.parse(generatedText);
+    parsed = JSON.parse(generatedText);
   } catch {
     throw new InvalidOutputError(generatedText);
   }
+
+  return parsed.map(({ name, explanationEn, explanationKo }) => ({
+    name,
+    explanation: explanationEn,
+    explanationKo,
+  }));
 };
 
 export {

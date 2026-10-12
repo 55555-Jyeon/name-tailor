@@ -87,7 +87,9 @@ const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCard
                 ✕
               </button>
             </div>
-            <p className={styles.explanation}>{item.explanation}</p>
+            <p className={styles.explanation}>
+              {language === 'ko' && item.explanationKo ? item.explanationKo : item.explanation}
+            </p>
           </li>
         ))}
       </ul>
