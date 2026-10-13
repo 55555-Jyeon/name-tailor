@@ -10,7 +10,10 @@ import SettingsMenu from '@/components/SettingsMenu';
 import { useTranslation } from '@/hooks/useTranslation';
 
 const Home = () => {
-  const { setContext, setRole, setNamingCase } = useNameStore();
+  // Actions only, so the page itself never re-renders on store updates
+  const setContext = useNameStore((state) => state.setContext);
+  const setRole = useNameStore((state) => state.setRole);
+  const setNamingCase = useNameStore((state) => state.setNamingCase);
   const contextInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslation();
 

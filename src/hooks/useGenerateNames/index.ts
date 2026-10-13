@@ -4,7 +4,10 @@ import { useNameStore } from '@/store/useNameStore';
 import type { NameRequest } from '@/types/name';
 
 const useGenerateNames = () => {
-  const { addResult, setIsLoading, setError } = useNameStore();
+  // Actions never change, so selecting them one by one never triggers a re-render
+  const addResult = useNameStore((state) => state.addResult);
+  const setIsLoading = useNameStore((state) => state.setIsLoading);
+  const setError = useNameStore((state) => state.setError);
 
   return useMutation({
     mutationFn: async ({ context, role, namingCase }: NameRequest) => {

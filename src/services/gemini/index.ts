@@ -44,6 +44,13 @@ const generateWithRetry = async (client: GoogleGenAI, params: GenerateParams) =>
   }
 };
 
+// Only called for errors that can fall back: a timeout, used-up quota or an overload
+const getFallbackReason = (error: unknown) => {
+  if (isTimeout(error)) return 'timed out';
+  if (isQuotaExceeded(error)) return 'quota exceeded';
+  return 'still overloaded';
+};
+
 const generateWithFallback = async (client: GoogleGenAI, params: Omit<GenerateParams, 'model'>) => {
   for (const [index, model] of MODELS.entries()) {
     try {
@@ -53,8 +60,7 @@ const generateWithFallback = async (client: GoogleGenAI, params: Omit<GeneratePa
       // Timed-out or quota-exceeded models are not retried; they go straight to the next model
       const canFallBack = isOverloaded(error) || isTimeout(error) || isQuotaExceeded(error);
       if (!canFallBack || !nextModel) throw error;
-      const reason = isTimeout(error) ? 'timed out' : isQuotaExceeded(error) ? 'quota exceeded' : 'still overloaded';
-      console.warn(`${model} ${reason}, falling back to ${nextModel}`);
+      console.warn(`${model} ${getFallbackReason(error)}, falling back to ${nextModel}`);
     }
   }
   throw new Error('No Gemini model configured');

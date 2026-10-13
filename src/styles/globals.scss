@@ -21,6 +21,11 @@
 :root {
   --primary: #3b82f6;
   --primary-hover: #2563eb;
+  --primary-tint: color-mix(in srgb, var(--primary) 10%, transparent);
+  --accent: #9333ea;
+  --accent-pink: #ec4899;
+  --danger: #ef4444;
+  --danger-tint: color-mix(in srgb, var(--danger) 8%, transparent);
   @include light-theme;
 }
 

@@ -62,7 +62,7 @@
 
   &:hover {
     opacity: 1;
-    background: rgba(59, 130, 246, 0.1);
+    background: var(--primary-tint);
   }
 }
 
@@ -132,8 +132,8 @@
 
   &:hover {
     opacity: 1;
-    color: #ef4444;
-    background: rgba(239, 68, 68, 0.08);
+    color: var(--danger);
+    background: var(--danger-tint);
   }
 }
 
@@ -144,7 +144,7 @@
   color: var(--primary);
   display: inline-block;
   padding: 0.2rem 0.5rem;
-  background: rgba(59, 130, 246, 0.1);
+  background: var(--primary-tint);
   border-radius: 6px;
   overflow-wrap: anywhere;
 }
@@ -180,7 +180,7 @@
   gap: 0.3rem;
   margin-top: 0.4rem;
   padding-left: 0.9rem;
-  border-left: 2px solid rgba(59, 130, 246, 0.25);
+  border-left: 2px solid color-mix(in srgb, var(--primary) 25%, transparent);
 }
 
 .word {

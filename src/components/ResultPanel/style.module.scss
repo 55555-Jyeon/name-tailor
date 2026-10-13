@@ -23,17 +23,17 @@
 
 .clearBtn {
   padding: 0.35rem 0.8rem;
-  border: 1px solid rgba(239, 68, 68, 0.35);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
   border-radius: 8px;
   background: transparent;
-  color: #ef4444;
+  color: var(--danger);
   font-family: inherit;
   font-size: 0.85rem;
   cursor: pointer;
   transition: background 0.2s ease;
 
   &:hover {
-    background: rgba(239, 68, 68, 0.08);
+    background: var(--danger-tint);
   }
 }
 
@@ -91,9 +91,9 @@
   background: conic-gradient(
     from var(--sweep-angle),
     transparent 0deg,
-    #3b82f6 40deg,
-    #9333ea 80deg,
-    #ec4899 110deg,
+    var(--primary) 40deg,
+    var(--accent) 80deg,
+    var(--accent-pink) 110deg,
     transparent 150deg
   );
   // Keep only the border ring: the full box minus its content box.

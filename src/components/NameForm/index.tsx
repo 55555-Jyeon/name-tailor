@@ -1,5 +1,6 @@
 'use client';
 
+import { useShallow } from 'zustand/react/shallow';
 import styles from './style.module.scss';
 import type { NameFormProps } from './type';
 import { useNameStore } from '@/store/useNameStore';
@@ -8,7 +9,19 @@ import { useTranslation } from '@/hooks/useTranslation';
 import { CASE_OPTIONS, ROLE_OPTIONS } from '@/constants/option';
 
 const NameForm = ({ inputRef }: NameFormProps) => {
-  const { context, role, namingCase, isLoading, error, setContext, setRole, setNamingCase } = useNameStore();
+  // Picks only what the form uses, so new result cards don't re-render it
+  const { context, role, namingCase, isLoading, error, setContext, setRole, setNamingCase } = useNameStore(
+    useShallow((state) => ({
+      context: state.context,
+      role: state.role,
+      namingCase: state.namingCase,
+      isLoading: state.isLoading,
+      error: state.error,
+      setContext: state.setContext,
+      setRole: state.setRole,
+      setNamingCase: state.setNamingCase,
+    }))
+  );
   const generateNames = useGenerateNames();
   const t = useTranslation();
 
@@ -69,7 +82,6 @@ const NameForm = ({ inputRef }: NameFormProps) => {
         className={styles.submitBtn}
         onClick={handleGenerate}
         disabled={isSubmitDisabled}
-        style={{ opacity: isSubmitDisabled ? 0.7 : 1, cursor: isSubmitDisabled ? 'not-allowed' : 'pointer' }}
       >
         {isLoading ? t.form.generating : t.form.generate}
       </button>

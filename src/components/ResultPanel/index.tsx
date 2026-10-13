@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import styles from './style.module.scss';
 import type { ResultPanelProps } from './type';
 import { useNameStore } from '@/store/useNameStore';
@@ -9,7 +10,16 @@ import { useTranslation } from '@/hooks/useTranslation';
 
 // Only this panel scrolls; the form stays fixed in place
 const ResultPanel = ({ onReuse }: ResultPanelProps) => {
-  const { results, isLoading, removeResult, removeSuggestion, clearResults } = useNameStore();
+  // Picks only what the panel uses, so typing in the form doesn't re-render every card
+  const { results, isLoading, removeResult, removeSuggestion, clearResults } = useNameStore(
+    useShallow((state) => ({
+      results: state.results,
+      isLoading: state.isLoading,
+      removeResult: state.removeResult,
+      removeSuggestion: state.removeSuggestion,
+      clearResults: state.clearResults,
+    }))
+  );
   const t = useTranslation();
   const bodyRef = useRef<HTMLDivElement>(null);
   const [hasMoreBelow, setHasMoreBelow] = useState(false);
