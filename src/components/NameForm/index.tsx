@@ -12,8 +12,10 @@ const NameForm = ({ inputRef }: NameFormProps) => {
   const generateNames = useGenerateNames();
   const t = useTranslation();
 
+  const isSubmitDisabled = isLoading || !context.trim();
+
   const handleGenerate = () => {
-    if (!context.trim()) return;
+    if (isSubmitDisabled) return;
     generateNames.mutate({ context, role, namingCase });
   };
 
@@ -30,7 +32,9 @@ const NameForm = ({ inputRef }: NameFormProps) => {
           placeholder={t.form.contextPlaceholder}
           autoComplete="off"
           onKeyDown={(e) => {
-            if (e.key === 'Enter') handleGenerate();
+            // While a Korean/Japanese IME is composing, Enter only confirms the syllable
+            if (e.key !== 'Enter' || e.nativeEvent.isComposing) return;
+            handleGenerate();
           }}
         />
       </div>
@@ -64,8 +68,8 @@ const NameForm = ({ inputRef }: NameFormProps) => {
       <button
         className={styles.submitBtn}
         onClick={handleGenerate}
-        disabled={isLoading || !context.trim()}
-        style={{ opacity: (isLoading || !context.trim()) ? 0.7 : 1, cursor: (isLoading || !context.trim()) ? 'not-allowed' : 'pointer' }}
+        disabled={isSubmitDisabled}
+        style={{ opacity: isSubmitDisabled ? 0.7 : 1, cursor: isSubmitDisabled ? 'not-allowed' : 'pointer' }}
       >
         {isLoading ? t.form.generating : t.form.generate}
       </button>

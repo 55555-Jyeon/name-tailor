@@ -1,8 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
-import { getErrorCode } from './constant';
+import { getErrorCode, toErrorCode } from './constant';
 import { useNameStore } from '@/store/useNameStore';
 import type { NameRequest } from '@/types/name';
-import type { ErrorCode } from '@/locales/type';
 
 const useGenerateNames = () => {
   const { addResult, setIsLoading, setError } = useNameStore();
@@ -32,8 +31,8 @@ const useGenerateNames = () => {
     },
     onError: (error) => {
       console.error('Error generating names:', error);
-      // The message is an error code; the form shows it in the current language
-      setError(error.message as ErrorCode);
+      // Server errors carry an error code; anything else (e.g. the network is down) is 'unknown'
+      setError(toErrorCode(error));
     },
     onSettled: () => {
       setIsLoading(false);
