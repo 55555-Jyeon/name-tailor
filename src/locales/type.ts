@@ -29,6 +29,7 @@ export interface Dictionary {
     copyLabel: (name: string) => string;
     removeLabel: (name: string) => string;
     removeTitle: string;
+    words: string;
   };
   errors: Record<ErrorCode, string>;
   settings: {

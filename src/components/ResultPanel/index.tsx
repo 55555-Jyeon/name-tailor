@@ -33,6 +33,9 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
   // Cards being added or removed changes the content height
   useEffect(updateHasMoreBelow, [results, isLoading, updateHasMoreBelow]);
 
+  // Count individual names, not generations, so removing one name updates the total
+  const nameCount = results.reduce((total, result) => total + result.suggestions.length, 0);
+
   const handleClearAll = () => {
     if (window.confirm(t.results.clearConfirm)) clearResults();
   };
@@ -42,7 +45,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
       {results.length > 0 && (
         <div className={styles.header}>
           <span className={styles.count}>
-            {t.results.count(results.length)}
+            {t.results.count(nameCount)}
           </span>
           <button type="button" className={styles.clearBtn} onClick={handleClearAll}>
             {t.results.clearAll}

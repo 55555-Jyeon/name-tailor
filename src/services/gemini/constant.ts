@@ -18,8 +18,20 @@ export const SUGGESTIONS_SCHEMA = {
       name: { type: "string" },
       explanationEn: { type: "string" },
       explanationKo: { type: "string" },
+      words: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            word: { type: "string" },
+            definitionEn: { type: "string" },
+            definitionKo: { type: "string" },
+          },
+          required: ["word", "definitionEn", "definitionKo"],
+        },
+      },
     },
-    required: ["name", "explanationEn", "explanationKo"],
+    required: ["name", "explanationEn", "explanationKo", "words"],
   },
   minItems: 3,
   maxItems: 3,

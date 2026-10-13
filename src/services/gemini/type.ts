@@ -7,4 +7,11 @@ export interface GeminiSuggestion {
   name: string;
   explanationEn: string;
   explanationKo: string;
+  words: GeminiWord[];
+}
+
+export interface GeminiWord {
+  word: string;
+  definitionEn: string;
+  definitionKo: string;
 }

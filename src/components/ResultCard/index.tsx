@@ -90,6 +90,19 @@ const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCard
             <p className={styles.explanation}>
               {language === 'ko' && item.explanationKo ? item.explanationKo : item.explanation}
             </p>
+            {item.words && item.words.length > 0 && (
+              <details className={styles.words}>
+                <summary className={styles.wordsToggle}>{t.card.words}</summary>
+                <ul className={styles.wordList}>
+                  {item.words.map(({ word, definition, definitionKo }, index) => (
+                    <li key={`${word}-${index}`} className={styles.word}>
+                      <code className={styles.wordTerm}>{word}</code>
+                      <span>{language === 'ko' ? definitionKo : definition}</span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
           </li>
         ))}
       </ul>

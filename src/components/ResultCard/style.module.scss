@@ -156,6 +156,51 @@
   line-height: 1.5;
 }
 
+// Collapsed by default so the card stays short; opens to list each word's meaning
+.words {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+}
+
+.wordsToggle {
+  width: fit-content;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.wordList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.4rem;
+  padding-left: 0.9rem;
+  border-left: 2px solid rgba(59, 130, 246, 0.25);
+}
+
+.word {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  line-height: 1.4;
+
+  span {
+    opacity: 0.8;
+  }
+}
+
+.wordTerm {
+  flex-shrink: 0;
+  font-family: var(--font-geist-mono), monospace;
+  font-weight: 600;
+  color: var(--primary);
+}
+
 // Narrow screens: give long names more room so they don't break mid-word as often
 @media (max-width: 899px) {
   .card {

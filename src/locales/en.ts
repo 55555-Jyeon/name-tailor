@@ -35,6 +35,7 @@ const en: Dictionary = {
     copyLabel: (name) => `Copy ${name}`,
     removeLabel: (name) => `Remove ${name}`,
     removeTitle: 'Remove this name',
+    words: 'Word meanings',
   },
   errors: {
     quotaExceeded: "You've used up the free quota for now. Please try again later.",

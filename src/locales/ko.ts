@@ -35,6 +35,7 @@ const ko: Dictionary = {
     copyLabel: (name) => `${name} 복사`,
     removeLabel: (name) => `${name} 삭제`,
     removeTitle: '이 이름 삭제',
+    words: '단어 뜻',
   },
   errors: {
     quotaExceeded: '지금은 무료 사용량을 모두 썼어요. 잠시 후 다시 시도해 주세요.',

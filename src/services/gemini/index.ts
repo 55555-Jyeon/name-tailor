@@ -69,7 +69,9 @@ Requirements:
 - Naming Convention: ${namingCase}
 
 Please provide exactly 3 name suggestions. For each suggestion, explain in one sentence why it's a good name,
-once in English (explanationEn) and once in natural Korean (explanationKo). Keep the names themselves in English.`;
+once in English (explanationEn) and once in natural Korean (explanationKo). Keep the names themselves in English.
+Also split each name into the words it is built from (words), in the order they appear and spelled as they appear in the name.
+For each word give a short dictionary-style meaning of a few words, in English (definitionEn) and in Korean (definitionKo).`;
 
 const generateNameSuggestions = async (request: NameRequest): Promise<NameSuggestion[]> => {
   if (!ai) throw new Error('GEMINI_API_KEY is not set');
@@ -92,10 +94,15 @@ const generateNameSuggestions = async (request: NameRequest): Promise<NameSugges
     throw new InvalidOutputError(generatedText);
   }
 
-  return parsed.map(({ name, explanationEn, explanationKo }) => ({
+  return parsed.map(({ name, explanationEn, explanationKo, words }) => ({
     name,
     explanation: explanationEn,
     explanationKo,
+    words: words.map(({ word, definitionEn, definitionKo }) => ({
+      word,
+      definition: definitionEn,
+      definitionKo,
+    })),
   }));
 };
 
