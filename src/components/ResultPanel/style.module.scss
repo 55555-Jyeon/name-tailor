@@ -58,11 +58,74 @@
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 64px), transparent);
 }
 
-.empty {
+// Registered so the gradient angle can be animated
+@property --sweep-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.stage {
+  position: relative;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid rgba(150, 150, 150, 0.15);
+  border-radius: 16px;
+
+  .loading {
+    margin-bottom: 0;
+  }
+}
+
+// A bright arc of gradient travels around the border once, like an AI chat input
+// waiting for the next question. ::before is the crisp line, ::after a soft glow under it
+.sweep::before,
+.sweep::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--sweep-angle),
+    transparent 0deg,
+    #3b82f6 40deg,
+    #9333ea 80deg,
+    #ec4899 110deg,
+    transparent 150deg
+  );
+  // Keep only the border ring: the full box minus its content box.
+  // Longhands on purpose; the minifier drops `exclude` from the mask shorthand
+  mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+  mask-clip: content-box, border-box;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  // Short delay: saved cards are restored right after mount, so the frame may vanish at once
+  animation: sweep 2.4s ease-in-out 0.3s 1 both;
+}
+
+.sweep::after {
+  filter: blur(8px);
+}
+
+@keyframes sweep {
+  0% { --sweep-angle: 0deg; opacity: 0; }
+  15% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { --sweep-angle: 360deg; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sweep::before,
+  .sweep::after {
+    animation: none;
+  }
+}
+
+.empty {
   text-align: center;
   color: var(--foreground);
   opacity: 0.5;
@@ -108,7 +171,7 @@
     overflow-y: visible;
   }
 
-  .empty {
-    padding: 2rem 0;
+  .stage {
+    min-height: 240px;
   }
 }

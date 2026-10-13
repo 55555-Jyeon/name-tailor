@@ -57,7 +57,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
         className={`${styles.body} ${hasMoreBelow ? styles.fadeBottom : ''}`}
         onScroll={updateHasMoreBelow}
       >
-        {isLoading && (
+        {isLoading && results.length > 0 && (
           <div className={styles.loading}>
             {t.results.loading}
           </div>
@@ -77,8 +77,16 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
           </div>
         )}
 
-        {!isLoading && results.length === 0 && (
-          <p className={styles.empty}>{t.results.empty}</p>
+        {/* Before the first result the whole area is one frame: the spinner sits in its center,
+            and once idle a gradient sweeps around the border to invite the next request */}
+        {results.length === 0 && (
+          <div className={`${styles.stage} ${isLoading ? '' : styles.sweep}`}>
+            {isLoading ? (
+              <div className={styles.loading}>{t.results.loading}</div>
+            ) : (
+              <p className={styles.empty}>{t.results.empty}</p>
+            )}
+          </div>
         )}
       </div>
     </section>
