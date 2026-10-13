@@ -71,7 +71,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid rgba(150, 150, 150, 0.15);
+  // No resting border: the area is only outlined by the one-time sweep below
   border-radius: 16px;
 
   .loading {
@@ -85,7 +85,7 @@
 .sweep::after {
   content: '';
   position: absolute;
-  inset: -1px;
+  inset: 0;
   padding: 2px;
   border-radius: inherit;
   background: conic-gradient(
