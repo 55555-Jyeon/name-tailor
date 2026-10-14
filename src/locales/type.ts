@@ -17,6 +17,9 @@ export interface Dictionary {
     count: (count: number) => string;
     clearAll: string;
     clearConfirm: string;
+    clearConfirmDescription: string;
+    clearConfirmAction: string;
+    cancel: string;
     loading: string;
     empty: string;
   };

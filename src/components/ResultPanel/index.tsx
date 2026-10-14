@@ -6,6 +6,7 @@ import styles from './style.module.scss';
 import type { ResultPanelProps } from './type';
 import { useNameStore } from '@/store/useNameStore';
 import ResultCard from '@/components/ResultCard';
+import ConfirmModal from '@/components/ConfirmModal';
 import { useTranslation } from '@/hooks/useTranslation';
 
 // Only this panel scrolls; the form stays fixed in place
@@ -46,8 +47,11 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
   // Count individual names, not generations, so removing one name updates the total
   const nameCount = results.reduce((total, result) => total + result.suggestions.length, 0);
 
-  const handleClearAll = () => {
-    if (window.confirm(t.results.clearConfirm)) clearResults();
+  const [isClearConfirmOpen, setIsClearConfirmOpen] = useState(false);
+
+  const handleConfirmClear = () => {
+    clearResults();
+    setIsClearConfirmOpen(false);
   };
 
   return (
@@ -57,7 +61,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
           <span className={styles.count}>
             {t.results.count(nameCount)}
           </span>
-          <button type="button" className={styles.clearBtn} onClick={handleClearAll}>
+          <button type="button" className={styles.clearBtn} onClick={() => setIsClearConfirmOpen(true)}>
             {t.results.clearAll}
           </button>
         </div>
@@ -99,6 +103,16 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
           </div>
         )}
       </div>
+
+      <ConfirmModal
+        isOpen={isClearConfirmOpen}
+        title={t.results.clearConfirm}
+        description={t.results.clearConfirmDescription}
+        confirmLabel={t.results.clearConfirmAction}
+        cancelLabel={t.results.cancel}
+        onConfirm={handleConfirmClear}
+        onCancel={() => setIsClearConfirmOpen(false)}
+      />
     </section>
   );
 };
