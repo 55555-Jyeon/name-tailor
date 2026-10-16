@@ -1,5 +1,5 @@
 // Role labels are translated (see locales); naming conventions read the same in every language
-const ROLE_OPTIONS = ['variable', 'function', 'component', 'class', 'hook', 'file', 'directory'];
+const ROLE_OPTIONS = ['variable', 'function', 'component', 'class', 'hook', 'file', 'directory', 'project'];
 
 const CASE_OPTIONS = [
   { value: 'camelCase', label: 'camelCase (myVariable)' },

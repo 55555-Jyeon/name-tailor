@@ -18,6 +18,7 @@ const en: Dictionary = {
     hook: 'React Hook',
     file: 'File Name',
     directory: 'Directory Name',
+    project: 'Project',
   },
   results: {
     count: (count) => `${count} ${count === 1 ? 'result' : 'results'}`,

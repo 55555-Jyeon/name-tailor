@@ -1,0 +1,120 @@
+.select {
+  position: relative;
+  width: 100%;
+}
+
+// Matches the text input next to it
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(150, 150, 150, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--foreground);
+  font-family: inherit;
+  font-size: 1rem;
+  text-align: left;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: rgba(150, 150, 150, 0.35);
+  }
+
+  &:focus-visible,
+  &.open {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary) 20%, transparent);
+  }
+}
+
+.value {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0.5;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+
+  .open & {
+    transform: rotate(180deg);
+    opacity: 0.9;
+  }
+}
+
+.list {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 280px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0.35rem;
+  border: 1px solid rgba(150, 150, 150, 0.2);
+  border-radius: 14px;
+  background: var(--background);
+  box-shadow: var(--shadow), 0 16px 32px rgba(0, 0, 0, 0.18);
+  animation: dropIn 0.14s ease-out;
+  transform-origin: top;
+  scrollbar-width: thin;
+}
+
+@keyframes dropIn {
+  from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 9px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.12s ease;
+
+  &.active {
+    background: var(--primary-tint);
+  }
+
+  &[aria-selected='true'] {
+    color: var(--primary);
+    font-weight: 600;
+  }
+}
+
+.check {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .list {
+    animation: none;
+  }
+}

@@ -18,6 +18,7 @@ const ko: Dictionary = {
     hook: 'React 훅',
     file: '파일 이름',
     directory: '폴더 이름',
+    project: '프로젝트',
   },
   results: {
     count: (count) => `결과 ${count}개`,

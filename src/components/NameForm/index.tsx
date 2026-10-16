@@ -7,6 +7,7 @@ import { useNameStore } from '@/store/useNameStore';
 import { useGenerateNames } from '@/hooks/useGenerateNames';
 import { useTranslation } from '@/hooks/useTranslation';
 import { CASE_OPTIONS, ROLE_OPTIONS } from '@/constants/option';
+import Select from '@/components/Select';
 
 const NameForm = ({ inputRef }: NameFormProps) => {
   // Picks only what the form uses, so new result cards don't re-render it
@@ -54,28 +55,22 @@ const NameForm = ({ inputRef }: NameFormProps) => {
 
       <div className={styles.formGroup}>
         <label htmlFor="role">{t.form.roleLabel}</label>
-        <select
+        <Select
           id="role"
           value={role}
-          onChange={(e) => setRole(e.target.value)}
-        >
-          {ROLE_OPTIONS.map((value) => (
-            <option key={value} value={value}>{t.roles[value]}</option>
-          ))}
-        </select>
+          options={ROLE_OPTIONS.map((value) => ({ value, label: t.roles[value] }))}
+          onChange={setRole}
+        />
       </div>
 
       <div className={styles.formGroup}>
         <label htmlFor="case">{t.form.caseLabel}</label>
-        <select
+        <Select
           id="case"
           value={namingCase}
-          onChange={(e) => setNamingCase(e.target.value)}
-        >
-          {CASE_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
-          ))}
-        </select>
+          options={CASE_OPTIONS}
+          onChange={setNamingCase}
+        />
       </div>
 
       <button
