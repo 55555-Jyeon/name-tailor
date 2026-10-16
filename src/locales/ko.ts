@@ -28,6 +28,14 @@ const ko: Dictionary = {
     hook: 'React 훅',
     directory: '폴더 이름',
   },
+  // The convention's own name stays in English: it is also how the name will be written
+  cases: {
+    camelCase: '카멜 케이스 · camelCase',
+    PascalCase: '파스칼 케이스 · PascalCase',
+    snake_case: '스네이크 케이스 · snake_case',
+    'kebab-case': '케밥 케이스 · kebab-case',
+    UPPER_SNAKE_CASE: '대문자 스네이크 케이스 · UPPER_SNAKE_CASE',
+  },
   functionRules: {
     'verb-suffix': { label: '동사를 뒤에 넣을게요.', example: 'profileFetcher', short: '동사 뒤' },
     'verb-prefix': { label: '동사를 앞에 넣을게요.', example: 'fetchProfile', short: '동사 앞' },
@@ -35,6 +43,7 @@ const ko: Dictionary = {
   },
   results: {
     count: (count) => `결과 ${count}개`,
+    panelLabel: '생성한 이름',
     clearAll: '전체 지우기',
     clearConfirm: '생성한 이름을 모두 지울까요?',
     clearConfirmDescription: '지운 이름은 다시 불러올 수 없어요.',

@@ -55,7 +55,7 @@ const ResultPanel = ({ onReuse }: ResultPanelProps) => {
   };
 
   return (
-    <section className={styles.panel} aria-label="Generated names">
+    <section className={styles.panel} aria-label={t.results.panelLabel}>
       {results.length > 0 && (
         <div className={styles.header}>
           <span className={styles.count}>

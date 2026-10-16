@@ -28,6 +28,13 @@ const en: Dictionary = {
     hook: 'React Hook',
     directory: 'Directory Name',
   },
+  cases: {
+    camelCase: 'camelCase (myVariable)',
+    PascalCase: 'PascalCase (MyClass)',
+    snake_case: 'snake_case (my_variable)',
+    'kebab-case': 'kebab-case (my-file-name)',
+    UPPER_SNAKE_CASE: 'UPPER_SNAKE_CASE (MY_CONSTANT)',
+  },
   functionRules: {
     'verb-suffix': { label: 'Put the verb at the end.', example: 'profileFetcher', short: 'verb last' },
     'verb-prefix': { label: 'Put the verb first.', example: 'fetchProfile', short: 'verb first' },
@@ -35,6 +42,7 @@ const en: Dictionary = {
   },
   results: {
     count: (count) => `${count} ${count === 1 ? 'result' : 'results'}`,
+    panelLabel: 'Generated names',
     clearAll: 'Clear all',
     clearConfirm: 'Remove all generated names?',
     clearConfirmDescription: "Removed names can't be brought back.",

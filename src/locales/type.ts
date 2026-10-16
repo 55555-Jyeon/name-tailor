@@ -21,10 +21,12 @@ export interface Dictionary {
     generating: string;
   };
   roles: Record<string, string>;
+  cases: Record<string, string>;
   // label: checkbox text, example: sample name beside it, short: tag on result cards
   functionRules: Record<FunctionRule, { label: string; example: string; short: string }>;
   results: {
     count: (count: number) => string;
+    panelLabel: string;
     clearAll: string;
     clearConfirm: string;
     clearConfirmDescription: string;

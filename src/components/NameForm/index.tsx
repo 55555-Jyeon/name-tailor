@@ -115,7 +115,7 @@ const NameForm = ({ inputRef }: NameFormProps) => {
         <Select
           id="case"
           value={namingCase}
-          options={CASE_OPTIONS}
+          options={CASE_OPTIONS.map((value) => ({ value, label: t.cases[value] }))}
           onChange={setNamingCase}
         />
       </div>

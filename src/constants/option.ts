@@ -29,13 +29,8 @@ const sanitizeFunctionRules = (values: unknown[]): FunctionRule[] => {
   );
 };
 
-const CASE_OPTIONS = [
-  { value: 'camelCase', label: 'camelCase (myVariable)' },
-  { value: 'PascalCase', label: 'PascalCase (MyClass)' },
-  { value: 'snake_case', label: 'snake_case (my_variable)' },
-  { value: 'kebab-case', label: 'kebab-case (my-file-name)' },
-  { value: 'UPPER_SNAKE_CASE', label: 'UPPER_SNAKE_CASE (MY_CONSTANT)' },
-];
+// Labels are translated (see locales `cases`); the value itself is what the prompt receives
+const CASE_OPTIONS = ['camelCase', 'PascalCase', 'snake_case', 'kebab-case', 'UPPER_SNAKE_CASE'];
 
 // Shared by the form and the API: more words than this rarely fit in one good name
 const MAX_REQUIRED_WORDS = 5;
