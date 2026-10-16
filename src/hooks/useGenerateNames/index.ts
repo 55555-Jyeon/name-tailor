@@ -10,13 +10,13 @@ const useGenerateNames = () => {
   const setError = useNameStore((state) => state.setError);
 
   return useMutation({
-    mutationFn: async ({ context, role, namingCase }: NameRequest) => {
+    mutationFn: async ({ context, role, namingCase, requiredWords }: NameRequest) => {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ context, role, namingCase }),
+        body: JSON.stringify({ context, role, namingCase, requiredWords }),
       });
 
       if (!response.ok) {

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { NameState } from './type';
+import { sanitizeRequiredWords } from '@/constants/option';
 
 const useNameStore = create<NameState>()(
   persist(
@@ -8,12 +9,19 @@ const useNameStore = create<NameState>()(
       context: '',
       role: 'function',
       namingCase: 'camelCase',
+      requiredWords: [],
       results: [],
       isLoading: false,
       error: null,
       setContext: (context) => set({ context }),
       setRole: (role) => set({ role }),
       setNamingCase: (namingCase) => set({ namingCase }),
+      setRequiredWords: (words) => set({ requiredWords: sanitizeRequiredWords(words) }),
+      // Duplicates, blanks and words past the limit are dropped by the sanitizer
+      addRequiredWord: (word) =>
+        set((state) => ({ requiredWords: sanitizeRequiredWords([...state.requiredWords, word]) })),
+      removeRequiredWord: (word) =>
+        set((state) => ({ requiredWords: state.requiredWords.filter((item) => item !== word) })),
       // Newest first, so the latest result is always visible without scrolling
       addResult: (result) =>
         set((state) => ({

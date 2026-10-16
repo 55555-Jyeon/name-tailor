@@ -8,6 +8,7 @@ import {
   isQuotaExceeded,
   isTimeout,
 } from '@/services/gemini';
+import { sanitizeRequiredWords } from '@/constants/option';
 
 const POST = async (req: Request) => {
   try {
@@ -18,7 +19,7 @@ const POST = async (req: Request) => {
       );
     }
 
-    const { context, role, namingCase } = await req.json();
+    const { context, role, namingCase, requiredWords } = await req.json();
 
     if (!context || !role || !namingCase) {
       return NextResponse.json(
@@ -27,7 +28,10 @@ const POST = async (req: Request) => {
       );
     }
 
-    const suggestions = await generateNameSuggestions({ context, role, namingCase });
+    // Optional; the client already cleans it, but this endpoint is public, so clean it again
+    const words = Array.isArray(requiredWords) ? sanitizeRequiredWords(requiredWords) : [];
+
+    const suggestions = await generateNameSuggestions({ context, role, namingCase, requiredWords: words });
     return NextResponse.json({ suggestions });
 
   } catch (error) {

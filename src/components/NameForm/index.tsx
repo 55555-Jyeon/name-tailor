@@ -6,21 +6,37 @@ import type { NameFormProps } from './type';
 import { useNameStore } from '@/store/useNameStore';
 import { useGenerateNames } from '@/hooks/useGenerateNames';
 import { useTranslation } from '@/hooks/useTranslation';
-import { CASE_OPTIONS, ROLE_OPTIONS } from '@/constants/option';
+import { CASE_OPTIONS, MAX_REQUIRED_WORD_LENGTH, MAX_REQUIRED_WORDS, ROLE_OPTIONS } from '@/constants/option';
 import Select from '@/components/Select';
+import ChipInput from '@/components/ChipInput';
 
 const NameForm = ({ inputRef }: NameFormProps) => {
   // Picks only what the form uses, so new result cards don't re-render it
-  const { context, role, namingCase, isLoading, error, setContext, setRole, setNamingCase } = useNameStore(
+  const {
+    context,
+    role,
+    namingCase,
+    requiredWords,
+    isLoading,
+    error,
+    setContext,
+    setRole,
+    setNamingCase,
+    addRequiredWord,
+    removeRequiredWord,
+  } = useNameStore(
     useShallow((state) => ({
       context: state.context,
       role: state.role,
       namingCase: state.namingCase,
+      requiredWords: state.requiredWords,
       isLoading: state.isLoading,
       error: state.error,
       setContext: state.setContext,
       setRole: state.setRole,
       setNamingCase: state.setNamingCase,
+      addRequiredWord: state.addRequiredWord,
+      removeRequiredWord: state.removeRequiredWord,
     }))
   );
   const generateNames = useGenerateNames();
@@ -30,7 +46,7 @@ const NameForm = ({ inputRef }: NameFormProps) => {
 
   const handleGenerate = () => {
     if (isSubmitDisabled) return;
-    generateNames.mutate({ context, role, namingCase });
+    generateNames.mutate({ context, role, namingCase, requiredWords });
   };
 
   return (
@@ -50,6 +66,24 @@ const NameForm = ({ inputRef }: NameFormProps) => {
             if (e.key !== 'Enter' || e.nativeEvent.isComposing) return;
             handleGenerate();
           }}
+        />
+      </div>
+
+      <div className={styles.formGroup}>
+        <div className={styles.labelRow}>
+          <label htmlFor="required-words">{t.form.requiredWordsLabel}</label>
+          <span className={styles.hint}>{t.form.requiredWordsHint(MAX_REQUIRED_WORDS)}</span>
+        </div>
+        <ChipInput
+          id="required-words"
+          values={requiredWords}
+          onAdd={addRequiredWord}
+          onRemove={removeRequiredWord}
+          maxCount={MAX_REQUIRED_WORDS}
+          maxLength={MAX_REQUIRED_WORD_LENGTH}
+          placeholder={t.form.requiredWordsPlaceholder}
+          addLabel={t.form.requiredWordsAdd}
+          removeLabel={t.form.requiredWordsRemove}
         />
       </div>
 

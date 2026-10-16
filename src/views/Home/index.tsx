@@ -14,6 +14,7 @@ const Home = () => {
   const setContext = useNameStore((state) => state.setContext);
   const setRole = useNameStore((state) => state.setRole);
   const setNamingCase = useNameStore((state) => state.setNamingCase);
+  const setRequiredWords = useNameStore((state) => state.setRequiredWords);
   const contextInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslation();
 
@@ -27,6 +28,7 @@ const Home = () => {
     setContext(result.context);
     setRole(result.role);
     setNamingCase(result.namingCase);
+    setRequiredWords(result.requiredWords ?? []);
     contextInputRef.current?.focus();
   };
 

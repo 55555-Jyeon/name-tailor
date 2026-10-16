@@ -53,6 +53,13 @@ const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCard
           <p className={styles.tags}>
             {t.roles[result.role] ?? result.role} · {result.namingCase} · {time}
           </p>
+          {result.requiredWords && result.requiredWords.length > 0 && (
+            <ul className={styles.requiredWords} aria-label={t.card.requiredWords}>
+              {result.requiredWords.map((word) => (
+                <li key={word} className={styles.requiredWord}>{word}</li>
+              ))}
+            </ul>
+          )}
         </div>
         <div className={styles.actions}>
           <button type="button" className={styles.reuseBtn} onClick={onReuse} title={t.card.reuseTitle}>

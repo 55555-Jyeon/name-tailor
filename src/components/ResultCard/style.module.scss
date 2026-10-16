@@ -41,6 +41,26 @@
   opacity: 0.6;
 }
 
+// The words this generation had to include, as small read-only chips under the tags
+.requiredWords {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.45rem;
+}
+
+.requiredWord {
+  padding: 0.1rem 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  border-radius: 999px;
+  background: var(--primary-tint);
+  color: var(--primary);
+  font-family: var(--font-geist-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
 .actions {
   flex-shrink: 0;
   display: flex;

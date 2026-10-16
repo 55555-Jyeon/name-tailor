@@ -9,6 +9,11 @@ export interface Dictionary {
     contextPlaceholder: string;
     roleLabel: string;
     caseLabel: string;
+    requiredWordsLabel: string;
+    requiredWordsHint: (max: number) => string;
+    requiredWordsPlaceholder: string;
+    requiredWordsAdd: string;
+    requiredWordsRemove: (word: string) => string;
     generate: string;
     generating: string;
   };
@@ -33,6 +38,7 @@ export interface Dictionary {
     removeLabel: (name: string) => string;
     removeTitle: string;
     words: string;
+    requiredWords: string;
   };
   errors: Record<ErrorCode, string>;
   settings: {

@@ -66,14 +66,22 @@ const generateWithFallback = async (client: GoogleGenAI, params: Omit<GeneratePa
   throw new Error('No Gemini model configured');
 };
 
-const buildPrompt = ({ context, role, namingCase }: NameRequest) =>
+// Empty when the user picked no words, so the prompt stays as before
+const buildRequiredWordsLine = (requiredWords: string[] = []) =>
+  requiredWords.length === 0
+    ? ''
+    : `- Required Words: every name MUST contain each of these words: ${requiredWords.map((word) => `"${word}"`).join(', ')}.
+  Adapt their casing to the naming convention. If a word is not English, use its natural English equivalent.
+`;
+
+const buildPrompt = ({ context, role, namingCase, requiredWords }: NameRequest) =>
   `You are an expert developer assistant. Your task is to generate 3 high-quality, descriptive programming names based on the user's requirements.
 The names MUST follow the specified naming convention.
 Requirements:
 - Role: ${role}
 - Context/Description: ${context}
 - Naming Convention: ${namingCase}
-
+${buildRequiredWordsLine(requiredWords)}
 Please provide exactly 3 name suggestions. For each suggestion, explain in one sentence why it's a good name,
 once in English (explanationEn) and once in natural Korean (explanationKo). Keep the names themselves in English.
 Also split each name into the words it is built from (words), in the order they appear and spelled as they appear in the name.

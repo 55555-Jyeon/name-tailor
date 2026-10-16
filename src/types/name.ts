@@ -3,6 +3,8 @@ export interface NameRequest {
   context: string;
   role: string;
   namingCase: string;
+  // Words every suggested name must contain (cards saved before this option have none)
+  requiredWords?: string[];
 }
 
 // One word the name is built from, with a short meaning in each language
