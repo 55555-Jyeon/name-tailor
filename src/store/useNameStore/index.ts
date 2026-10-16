@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { NameState } from './type';
-import { sanitizeRequiredWords } from '@/constants/option';
+import { sanitizeFunctionRules, sanitizeRequiredWords } from '@/constants/option';
 
 const useNameStore = create<NameState>()(
   persist(
@@ -10,6 +10,7 @@ const useNameStore = create<NameState>()(
       role: 'function',
       namingCase: 'camelCase',
       requiredWords: [],
+      functionRules: [],
       results: [],
       isLoading: false,
       error: null,
@@ -22,6 +23,7 @@ const useNameStore = create<NameState>()(
         set((state) => ({ requiredWords: sanitizeRequiredWords([...state.requiredWords, word]) })),
       removeRequiredWord: (word) =>
         set((state) => ({ requiredWords: state.requiredWords.filter((item) => item !== word) })),
+      setFunctionRules: (rules) => set({ functionRules: sanitizeFunctionRules(rules) }),
       // Newest first, so the latest result is always visible without scrolling
       addResult: (result) =>
         set((state) => ({

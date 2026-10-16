@@ -1,4 +1,4 @@
-import type { GenerationResult } from '@/types/name';
+import type { FunctionRule, GenerationResult } from '@/types/name';
 import type { ErrorCode } from '@/locales/type';
 
 export interface NameState {
@@ -6,6 +6,8 @@ export interface NameState {
   role: string;
   namingCase: string;
   requiredWords: string[];
+  // Kept while another role is picked, so switching back restores the checks
+  functionRules: FunctionRule[];
   results: GenerationResult[];
   isLoading: boolean;
   error: ErrorCode | null;
@@ -15,6 +17,7 @@ export interface NameState {
   setRequiredWords: (words: string[]) => void;
   addRequiredWord: (word: string) => void;
   removeRequiredWord: (word: string) => void;
+  setFunctionRules: (rules: FunctionRule[]) => void;
   addResult: (result: Omit<GenerationResult, 'id' | 'createdAt'>) => void;
   removeResult: (id: string) => void;
   removeSuggestion: (resultId: string, name: string) => void;

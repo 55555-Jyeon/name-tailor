@@ -6,9 +6,16 @@ import type { NameFormProps } from './type';
 import { useNameStore } from '@/store/useNameStore';
 import { useGenerateNames } from '@/hooks/useGenerateNames';
 import { useTranslation } from '@/hooks/useTranslation';
-import { CASE_OPTIONS, MAX_REQUIRED_WORD_LENGTH, MAX_REQUIRED_WORDS, ROLE_OPTIONS } from '@/constants/option';
+import {
+  CASE_OPTIONS,
+  FUNCTION_RULES,
+  MAX_REQUIRED_WORD_LENGTH,
+  MAX_REQUIRED_WORDS,
+  ROLE_OPTIONS,
+} from '@/constants/option';
 import Select from '@/components/Select';
 import ChipInput from '@/components/ChipInput';
+import CheckboxGroup from '@/components/CheckboxGroup';
 
 const NameForm = ({ inputRef }: NameFormProps) => {
   // Picks only what the form uses, so new result cards don't re-render it
@@ -17,6 +24,7 @@ const NameForm = ({ inputRef }: NameFormProps) => {
     role,
     namingCase,
     requiredWords,
+    functionRules,
     isLoading,
     error,
     setContext,
@@ -24,12 +32,14 @@ const NameForm = ({ inputRef }: NameFormProps) => {
     setNamingCase,
     addRequiredWord,
     removeRequiredWord,
+    setFunctionRules,
   } = useNameStore(
     useShallow((state) => ({
       context: state.context,
       role: state.role,
       namingCase: state.namingCase,
       requiredWords: state.requiredWords,
+      functionRules: state.functionRules,
       isLoading: state.isLoading,
       error: state.error,
       setContext: state.setContext,
@@ -37,16 +47,25 @@ const NameForm = ({ inputRef }: NameFormProps) => {
       setNamingCase: state.setNamingCase,
       addRequiredWord: state.addRequiredWord,
       removeRequiredWord: state.removeRequiredWord,
+      setFunctionRules: state.setFunctionRules,
     }))
   );
   const generateNames = useGenerateNames();
   const t = useTranslation();
 
   const isSubmitDisabled = isLoading || !context.trim();
+  const isFunctionRole = role === 'function';
 
   const handleGenerate = () => {
     if (isSubmitDisabled) return;
-    generateNames.mutate({ context, role, namingCase, requiredWords });
+    generateNames.mutate({
+      context,
+      role,
+      namingCase,
+      requiredWords,
+      // Checks are kept while another role is picked, but only apply to functions
+      functionRules: isFunctionRole ? functionRules : [],
+    });
   };
 
   return (
@@ -77,6 +96,18 @@ const NameForm = ({ inputRef }: NameFormProps) => {
           options={ROLE_OPTIONS.map((value) => ({ value, label: t.roles[value] }))}
           onChange={setRole}
         />
+        {isFunctionRole && (
+          <CheckboxGroup
+            legend={t.form.functionRulesLabel}
+            options={FUNCTION_RULES.map((rule) => ({
+              value: rule,
+              label: t.functionRules[rule].label,
+              example: t.functionRules[rule].example,
+            }))}
+            values={functionRules}
+            onChange={setFunctionRules}
+          />
+        )}
       </div>
 
       <div className={styles.formGroup}>

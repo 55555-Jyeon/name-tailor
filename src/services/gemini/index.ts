@@ -1,7 +1,14 @@
 import { ApiError, GoogleGenAI } from '@google/genai';
-import { MODELS, REQUEST_TIMEOUT_MS, RETRY_DELAYS_MS, SUGGESTIONS_SCHEMA } from './constant';
+import {
+  FUNCTION_RULE_INSTRUCTIONS,
+  MODELS,
+  REQUEST_TIMEOUT_MS,
+  RETRY_DELAYS_MS,
+  ROLE_DESCRIPTIONS,
+  SUGGESTIONS_SCHEMA,
+} from './constant';
 import type { GeminiSuggestion, GenerateParams } from './type';
-import type { NameRequest, NameSuggestion } from '@/types/name';
+import type { FunctionRule, NameRequest, NameSuggestion } from '@/types/name';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
@@ -74,14 +81,18 @@ const buildRequiredWordsLine = (requiredWords: string[] = []) =>
   Adapt their casing to the naming convention. If a word is not English, use its natural English equivalent.
 `;
 
-const buildPrompt = ({ context, role, namingCase, requiredWords }: NameRequest) =>
+// One line per checked function rule; empty when none apply
+const buildFunctionRuleLines = (functionRules: FunctionRule[] = []) =>
+  functionRules.map((rule) => `- Rule: ${FUNCTION_RULE_INSTRUCTIONS[rule]}\n`).join('');
+
+const buildPrompt = ({ context, role, namingCase, requiredWords, functionRules }: NameRequest) =>
   `You are an expert developer assistant. Your task is to generate 3 high-quality, descriptive programming names based on the user's requirements.
 The names MUST follow the specified naming convention.
 Requirements:
-- Role: ${role}
+- Role: ${ROLE_DESCRIPTIONS[role] ?? role}
 - Context/Description: ${context}
 - Naming Convention: ${namingCase}
-${buildRequiredWordsLine(requiredWords)}
+${buildRequiredWordsLine(requiredWords)}${buildFunctionRuleLines(functionRules)}
 Please provide exactly 3 name suggestions. For each suggestion, explain in one sentence why it's a good name,
 once in English (explanationEn) and once in natural Korean (explanationKo). Keep the names themselves in English.
 Also split each name into the words it is built from (words), in the order they appear and spelled as they appear in the name.

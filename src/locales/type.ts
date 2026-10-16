@@ -1,3 +1,5 @@
+import type { FunctionRule } from '@/types/name';
+
 export type Language = 'ko' | 'en';
 
 export type ErrorCode = 'quotaExceeded' | 'busy' | 'unknown';
@@ -14,10 +16,13 @@ export interface Dictionary {
     requiredWordsPlaceholder: string;
     requiredWordsAdd: string;
     requiredWordsRemove: (word: string) => string;
+    functionRulesLabel: string;
     generate: string;
     generating: string;
   };
   roles: Record<string, string>;
+  // label: checkbox text, example: sample name beside it, short: tag on result cards
+  functionRules: Record<FunctionRule, { label: string; example: string; short: string }>;
   results: {
     count: (count: number) => string;
     clearAll: string;

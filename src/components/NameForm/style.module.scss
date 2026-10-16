@@ -20,7 +20,8 @@
     opacity: 0.9;
   }
 
-  input {
+  // Text fields only: the function-rule checkboxes are styled by CheckboxGroup
+  input[type='text'] {
     width: 100%;
     padding: 1rem;
     border-radius: 12px;

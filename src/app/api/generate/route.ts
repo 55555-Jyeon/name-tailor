@@ -8,7 +8,7 @@ import {
   isQuotaExceeded,
   isTimeout,
 } from '@/services/gemini';
-import { sanitizeRequiredWords } from '@/constants/option';
+import { sanitizeFunctionRules, sanitizeRequiredWords } from '@/constants/option';
 
 const POST = async (req: Request) => {
   try {
@@ -19,7 +19,7 @@ const POST = async (req: Request) => {
       );
     }
 
-    const { context, role, namingCase, requiredWords } = await req.json();
+    const { context, role, namingCase, requiredWords, functionRules } = await req.json();
 
     if (!context || !role || !namingCase) {
       return NextResponse.json(
@@ -30,8 +30,16 @@ const POST = async (req: Request) => {
 
     // Optional; the client already cleans it, but this endpoint is public, so clean it again
     const words = Array.isArray(requiredWords) ? sanitizeRequiredWords(requiredWords) : [];
+    // Function rules only make sense for the function role
+    const rules = role === 'function' && Array.isArray(functionRules) ? sanitizeFunctionRules(functionRules) : [];
 
-    const suggestions = await generateNameSuggestions({ context, role, namingCase, requiredWords: words });
+    const suggestions = await generateNameSuggestions({
+      context,
+      role,
+      namingCase,
+      requiredWords: words,
+      functionRules: rules,
+    });
     return NextResponse.json({ suggestions });
 
   } catch (error) {

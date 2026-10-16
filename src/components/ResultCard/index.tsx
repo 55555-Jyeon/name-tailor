@@ -51,7 +51,12 @@ const ResultCard = ({ result, onClose, onRemoveSuggestion, onReuse }: ResultCard
         <div className={styles.meta}>
           <p className={styles.context}>{result.context}</p>
           <p className={styles.tags}>
-            {t.roles[result.role] ?? result.role} · {result.namingCase} · {time}
+            {[
+              t.roles[result.role] ?? result.role,
+              result.namingCase,
+              ...(result.functionRules ?? []).map((rule) => t.functionRules[rule]?.short ?? rule),
+              time,
+            ].join(' · ')}
           </p>
           {result.requiredWords && result.requiredWords.length > 0 && (
             <ul className={styles.requiredWords} aria-label={t.card.requiredWords}>

@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import styles from './style.module.scss';
 import { useNameStore } from '@/store/useNameStore';
 import type { GenerationResult } from '@/types/name';
+import { LEGACY_ROLES } from '@/constants/option';
 import NameForm from '@/components/NameForm';
 import ResultPanel from '@/components/ResultPanel';
 import SettingsMenu from '@/components/SettingsMenu';
@@ -15,6 +16,7 @@ const Home = () => {
   const setRole = useNameStore((state) => state.setRole);
   const setNamingCase = useNameStore((state) => state.setNamingCase);
   const setRequiredWords = useNameStore((state) => state.setRequiredWords);
+  const setFunctionRules = useNameStore((state) => state.setFunctionRules);
   const contextInputRef = useRef<HTMLInputElement>(null);
   const t = useTranslation();
 
@@ -25,10 +27,13 @@ const Home = () => {
 
   // Put a card's inputs back into the form so they can be tweaked and regenerated
   const handleReuse = (result: GenerationResult) => {
+    // Cards saved before the role list was regrouped may use a role that is no longer offered
+    const legacy = LEGACY_ROLES[result.role];
     setContext(result.context);
-    setRole(result.role);
+    setRole(legacy?.role ?? result.role);
     setNamingCase(result.namingCase);
     setRequiredWords(result.requiredWords ?? []);
+    setFunctionRules(result.functionRules ?? legacy?.functionRules ?? []);
     contextInputRef.current?.focus();
   };
 

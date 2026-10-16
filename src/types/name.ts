@@ -1,3 +1,6 @@
+// Optional conventions for the function role: where the verb goes, and a `use` prefix (hooks)
+export type FunctionRule = 'verb-suffix' | 'verb-prefix' | 'use-prefix';
+
 // What the user asks for: one description, its role and the naming convention
 export interface NameRequest {
   context: string;
@@ -5,6 +8,8 @@ export interface NameRequest {
   namingCase: string;
   // Words every suggested name must contain (cards saved before this option have none)
   requiredWords?: string[];
+  // Only sent when role is 'function'
+  functionRules?: FunctionRule[];
 }
 
 // One word the name is built from, with a short meaning in each language
