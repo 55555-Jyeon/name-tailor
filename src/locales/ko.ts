@@ -8,7 +8,7 @@ const ko: Dictionary = {
     roleLabel: '어디에 쓸 이름인가요?',
     caseLabel: '표기법',
     requiredWordsLabel: '꼭 들어갈 단어 (선택)',
-    requiredWordsHint: (max) => `Enter로 추가 · 최대 ${max}개`,
+    requiredWordsHint: (max) => `최대 ${max}개`,
     requiredWordsPlaceholder: '예: user, draft',
     requiredWordsAdd: '추가',
     requiredWordsRemove: (word) => `${word} 삭제`,

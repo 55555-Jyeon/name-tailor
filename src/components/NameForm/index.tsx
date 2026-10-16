@@ -70,24 +70,6 @@ const NameForm = ({ inputRef }: NameFormProps) => {
       </div>
 
       <div className={styles.formGroup}>
-        <div className={styles.labelRow}>
-          <label htmlFor="required-words">{t.form.requiredWordsLabel}</label>
-          <span className={styles.hint}>{t.form.requiredWordsHint(MAX_REQUIRED_WORDS)}</span>
-        </div>
-        <ChipInput
-          id="required-words"
-          values={requiredWords}
-          onAdd={addRequiredWord}
-          onRemove={removeRequiredWord}
-          maxCount={MAX_REQUIRED_WORDS}
-          maxLength={MAX_REQUIRED_WORD_LENGTH}
-          placeholder={t.form.requiredWordsPlaceholder}
-          addLabel={t.form.requiredWordsAdd}
-          removeLabel={t.form.requiredWordsRemove}
-        />
-      </div>
-
-      <div className={styles.formGroup}>
         <label htmlFor="role">{t.form.roleLabel}</label>
         <Select
           id="role"
@@ -104,6 +86,25 @@ const NameForm = ({ inputRef }: NameFormProps) => {
           value={namingCase}
           options={CASE_OPTIONS}
           onChange={setNamingCase}
+        />
+      </div>
+
+      {/* Optional, so it comes after every required field */}
+      <div className={styles.formGroup}>
+        <div className={styles.labelRow}>
+          <label htmlFor="required-words">{t.form.requiredWordsLabel}</label>
+          <span className={styles.hint}>{t.form.requiredWordsHint(MAX_REQUIRED_WORDS)}</span>
+        </div>
+        <ChipInput
+          id="required-words"
+          values={requiredWords}
+          onAdd={addRequiredWord}
+          onRemove={removeRequiredWord}
+          maxCount={MAX_REQUIRED_WORDS}
+          maxLength={MAX_REQUIRED_WORD_LENGTH}
+          placeholder={t.form.requiredWordsPlaceholder}
+          addLabel={t.form.requiredWordsAdd}
+          removeLabel={t.form.requiredWordsRemove}
         />
       </div>
 

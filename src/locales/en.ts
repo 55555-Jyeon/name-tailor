@@ -8,7 +8,7 @@ const en: Dictionary = {
     roleLabel: 'What is this for?',
     caseLabel: 'Naming Convention',
     requiredWordsLabel: 'Must-include words (optional)',
-    requiredWordsHint: (max) => `Press Enter to add · up to ${max}`,
+    requiredWordsHint: (max) => `Up to ${max}`,
     requiredWordsPlaceholder: 'e.g. user, draft',
     requiredWordsAdd: 'Add',
     requiredWordsRemove: (word) => `Remove ${word}`,
