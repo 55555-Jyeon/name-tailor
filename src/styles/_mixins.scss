@@ -1,8 +1,9 @@
-// Card surface shared by the form and the result cards: no outline, just a lighter tone and a soft shadow
+// Card surface for the form panel: no outline, just a lighter tone and a soft shadow
 @mixin surface-card {
   background: var(--surface);
   border-radius: 24px;
-  padding: 2rem;
+  // 20px top/bottom, 16px left/right: narrow sides leave room for one-line checkbox labels
+  padding: 1.25rem 1rem;
   box-shadow: var(--shadow);
   width: 100%;
   z-index: 1;
