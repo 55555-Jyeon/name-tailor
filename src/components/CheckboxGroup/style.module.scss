@@ -4,9 +4,10 @@
   gap: 0.15rem;
   min-width: 0;
   padding: 0.6rem 0.75rem;
-  border: 1px solid rgba(150, 150, 150, 0.15);
+  border: none;
   border-radius: 12px;
-  background: rgba(150, 150, 150, 0.04);
+  // Same fill as the select above it, so the two read as one control
+  background: var(--field);
   animation: reveal 0.18s ease-out;
 }
 
@@ -35,7 +36,7 @@
   transition: background 0.15s ease;
 
   &:hover {
-    background: rgba(150, 150, 150, 0.08);
+    background: var(--field);
   }
 }
 

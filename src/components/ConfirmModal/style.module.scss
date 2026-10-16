@@ -2,11 +2,11 @@
   width: min(400px, calc(100vw - 2rem));
   margin: auto;
   padding: 0;
-  border: 1px solid rgba(150, 150, 150, 0.2);
+  border: none;
   border-radius: 20px;
-  background: var(--background);
+  background: var(--surface-raised);
   color: var(--foreground);
-  box-shadow: var(--shadow), 0 24px 48px rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-raised);
 
   &[open] {
     animation: popIn 0.18s ease-out;
@@ -71,18 +71,18 @@
 
 .cancelBtn {
   @extend %button;
-  border: 1px solid rgba(150, 150, 150, 0.3);
-  background: transparent;
+  border: none;
+  background: var(--field);
   color: var(--foreground);
 
   &:hover {
-    background: rgba(150, 150, 150, 0.12);
+    background: var(--field-hover);
   }
 }
 
 .confirmBtn {
   @extend %button;
-  border: 1px solid var(--danger);
+  border: none;
   background: var(--danger);
   color: white;
 

@@ -1,9 +1,6 @@
-// Cards sit directly on the page background, so they carry the same glass surface as the form
+// Cards sit directly on the page background: the lighter surface tone sets them apart, no outline
 .card {
-  background: var(--glass);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(150, 150, 150, 0.15);
+  background: var(--surface);
   box-shadow: var(--shadow);
   border-radius: 16px;
   padding: 1.2rem 1.4rem;
@@ -20,9 +17,8 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.75rem;
-  padding-bottom: 0.9rem;
-  margin-bottom: 0.9rem;
-  border-bottom: 1px solid rgba(150, 150, 150, 0.15);
+  // Spacing alone separates the header from the names; no divider line
+  margin-bottom: 1.25rem;
 }
 
 .meta {
@@ -52,7 +48,6 @@
 
 .requiredWord {
   padding: 0.1rem 0.5rem;
-  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
   border-radius: 999px;
   background: var(--primary-tint);
   color: var(--primary);
@@ -120,19 +115,19 @@
 .copyBtn {
   flex-shrink: 0;
   padding: 0.25rem 0.6rem;
-  border: 1px solid rgba(150, 150, 150, 0.25);
+  border: none;
   border-radius: 6px;
-  background: transparent;
+  background: var(--field);
   color: var(--foreground);
   font-family: inherit;
   font-size: 0.8rem;
-  opacity: 0.7;
+  opacity: 0.75;
   cursor: pointer;
-  transition: opacity 0.2s ease, border-color 0.2s ease;
+  transition: opacity 0.2s ease, background 0.2s ease;
 
   &:hover {
     opacity: 1;
-    border-color: var(--primary);
+    background: var(--field-hover);
   }
 }
 

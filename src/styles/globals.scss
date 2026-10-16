@@ -1,19 +1,28 @@
+// Areas are told apart by stepping the surface tone, not by outlines:
+// page (--background) < card (--surface) < floating layer (--surface-raised),
+// and form controls are filled (--field) instead of bordered.
 @mixin light-theme {
-  --background: #ffffff;
+  --background: #f3f5f9;
   --foreground: #171717;
-  --glass: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.3);
-  --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --field: rgba(15, 23, 42, 0.045);
+  --field-hover: rgba(15, 23, 42, 0.075);
+  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow-raised: 0 4px 12px rgba(15, 23, 42, 0.08), 0 16px 40px rgba(15, 23, 42, 0.12);
   --spinner-track: rgba(150, 150, 150, 0.25);
   color-scheme: light;
 }
 
 @mixin dark-theme {
-  --background: #0f172a;
+  --background: #0b1120;
   --foreground: #f8fafc;
-  --glass: rgba(15, 23, 42, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.35);
+  --surface: #151e30;
+  --surface-raised: #1e293b;
+  --field: rgba(255, 255, 255, 0.05);
+  --field-hover: rgba(255, 255, 255, 0.08);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-raised: 0 4px 12px rgba(0, 0, 0, 0.35), 0 16px 40px rgba(0, 0, 0, 0.45);
   --spinner-track: rgba(255, 255, 255, 0.1);
   color-scheme: dark;
 }

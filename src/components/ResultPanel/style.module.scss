@@ -23,9 +23,9 @@
 
 .clearBtn {
   padding: 0.35rem 0.8rem;
-  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
+  border: none;
   border-radius: 8px;
-  background: transparent;
+  background: var(--danger-tint);
   color: var(--danger);
   font-family: inherit;
   font-size: 0.85rem;
@@ -33,7 +33,7 @@
   transition: background 0.2s ease;
 
   &:hover {
-    background: var(--danger-tint);
+    background: color-mix(in srgb, var(--danger) 16%, transparent);
   }
 }
 
